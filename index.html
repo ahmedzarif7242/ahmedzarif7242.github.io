@@ -3,594 +3,641 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Ahmed Zarif — frontend engineer in Cairo building point-of-sale and commerce software in Angular. 19 feature modules, 7+ payment gateways, 4 production platforms.">
+<meta name="description" content="Ahmed Zarif — frontend developer in Cairo building point-of-sale and commerce software in Angular. 19 feature modules, 7+ payment gateways, 4 production platforms.">
 <meta name="author" content="Ahmed Zarif">
 <link rel="canonical" href="https://ahmedzarif7242.github.io/">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Ahmed Zarif — Frontend Engineer">
+<meta property="og:title" content="Ahmed Zarif — Frontend Developer & Angular Specialist">
 <meta property="og:description" content="I build the software people stand in front of — point-of-sale terminals, checkout flows, and the storefronts behind them.">
 <meta property="og:url" content="https://ahmedzarif7242.github.io/">
 <meta name="twitter:card" content="summary">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>%F0%9F%A7%BE</text></svg>">
 <style>*{margin:0}img{max-width:100%}</style>
-<title>Ahmed Zarif — Frontend Engineer</title>
+<title>Ahmed Zarif — Frontend Developer</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
 
 <style>
 /* ============================================================
-   Palette drawn from the hardware Ahmed builds for:
-   light  = thermal receipt paper, black ink, deep register green
-   dark   = the cyan VFD readout on a cash register
+   Palette from the hardware Ahmed builds for:
+   light = thermal receipt paper / register ink
+   dark  = the cyan VFD readout on a cash register
    ============================================================ */
 :root {
-  --ground:      #EDEEEA;
-  --surface:     #F7F8F5;
-  --ink:         #15181A;
-  --ink-2:       #454B4E;
-  --muted:       #767D80;
-  --rule:        #C6CAC3;
-  --rule-soft:   #DADDD6;
-  --accent:      #0E6A5E;
-  --accent-ink:  #0A4F46;
-  --accent-soft: rgba(14, 106, 94, .09);
+  --ground:#EDEEEA; --surface:#F7F8F5; --band:#E3E5DF;
+  --ink:#15181A; --ink-2:#454B4E; --muted:#767D80;
+  --rule:#C6CAC3; --rule-soft:#DADDD6;
+  --accent:#0E6A5E; --accent-soft:rgba(14,106,94,.09);
+  --on-accent:#F7F8F5;
+  --shadow:rgba(21,24,26,.09);
 
-  --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
-  --sans: "IBM Plex Sans", -apple-system, "Segoe UI", Roboto, sans-serif;
-  --disp: "Archivo", "IBM Plex Sans", -apple-system, "Segoe UI", sans-serif;
-
-  --measure: 63ch;
-  --pad: clamp(1.25rem, 5vw, 3.5rem);
+  --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  --sans:"IBM Plex Sans",-apple-system,"Segoe UI",Roboto,sans-serif;
+  --disp:"Archivo","IBM Plex Sans",-apple-system,"Segoe UI",sans-serif;
+  --pad:clamp(1.1rem,5vw,3rem);
 }
-
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --ground:      #0C0E0F;
-    --surface:     #14181A;
-    --ink:         #E8EDEC;
-    --ink-2:       #A7B0AE;
-    --muted:       #737C7B;
-    --rule:        #262D2E;
-    --rule-soft:   #1D2324;
-    --accent:      #55DFCE;
-    --accent-ink:  #7FE9DB;
-    --accent-soft: rgba(85, 223, 206, .11);
+    --ground:#0C0E0F; --surface:#14181A; --band:#101416;
+    --ink:#E8EDEC; --ink-2:#A7B0AE; --muted:#737C7B;
+    --rule:#262D2E; --rule-soft:#1D2324;
+    --accent:#55DFCE; --accent-soft:rgba(85,223,206,.11);
+    --on-accent:#0C0E0F;
+    --shadow:rgba(0,0,0,.5);
   }
 }
-
 :root[data-theme="dark"] {
-  --ground:      #0C0E0F;
-  --surface:     #14181A;
-  --ink:         #E8EDEC;
-  --ink-2:       #A7B0AE;
-  --muted:       #737C7B;
-  --rule:        #262D2E;
-  --rule-soft:   #1D2324;
-  --accent:      #55DFCE;
-  --accent-ink:  #7FE9DB;
-  --accent-soft: rgba(85, 223, 206, .11);
+  --ground:#0C0E0F; --surface:#14181A; --band:#101416;
+  --ink:#E8EDEC; --ink-2:#A7B0AE; --muted:#737C7B;
+  --rule:#262D2E; --rule-soft:#1D2324;
+  --accent:#55DFCE; --accent-soft:rgba(85,223,206,.11);
+  --on-accent:#0C0E0F;
+  --shadow:rgba(0,0,0,.5);
 }
 
-* { box-sizing: border-box; }
-
-body {
-  margin: 0;
-  background: var(--ground);
-  color: var(--ink);
-  font-family: var(--sans);
-  font-size: 16px;
-  line-height: 1.62;
-  -webkit-font-smoothing: antialiased;
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:5rem}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{
+  margin:0;background:var(--ground);color:var(--ink);
+  font-family:var(--sans);font-size:16px;line-height:1.62;
+  -webkit-font-smoothing:antialiased;
 }
+a{color:var(--accent);text-decoration:none}
+a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+img{max-width:100%}
 
-.wrap {
-  max-width: 60rem;
-  margin: 0 auto;
-  padding: clamp(2.5rem, 7vw, 5rem) var(--pad) 4rem;
+.shell{max-width:68rem;margin:0 auto;padding:0 var(--pad)}
+
+/* ================= NAV ================= */
+.nav{
+  position:sticky;top:0;z-index:50;
+  background:color-mix(in srgb,var(--band) 88%,transparent);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--rule);
 }
-
-a { color: var(--accent); text-decoration: none; }
-a:focus-visible,
-button:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 3px;
-  border-radius: 2px;
+.nav .shell{display:flex;align-items:center;justify-content:space-between;gap:1rem;height:4rem}
+.brand{
+  font-family:var(--disp);font-weight:800;font-size:1.05rem;
+  letter-spacing:.02em;text-transform:uppercase;color:var(--ink);
 }
-
-/* ---------- shared type roles ---------- */
-.label {
-  font-family: var(--mono);
-  font-size: .688rem;
-  font-weight: 500;
-  letter-spacing: .13em;
-  text-transform: uppercase;
-  color: var(--muted);
+.nav ul{display:flex;gap:.35rem;list-style:none;margin:0;padding:0}
+.nav a{
+  font-family:var(--mono);font-size:.75rem;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--ink-2);
+  padding:.45rem .7rem;display:block;
+  border-bottom:2px solid transparent;transition:color .15s,border-color .15s;
 }
-
-h2 {
-  font-family: var(--mono);
-  font-size: .688rem;
-  font-weight: 600;
-  letter-spacing: .13em;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin: 0;
+.nav a:hover,.nav a.on{color:var(--accent);border-bottom-color:var(--accent)}
+@media (max-width:37rem){
+  .nav .shell{height:auto;padding-top:.7rem;padding-bottom:.7rem;flex-direction:column;align-items:flex-start;gap:.4rem}
+  .nav ul{flex-wrap:wrap}
+  .nav a{padding:.3rem .5rem}
 }
 
-p { margin: 0 0 1.1rem; max-width: var(--measure); }
-p:last-child { margin-bottom: 0; }
+/* ================= SHARED ================= */
+section{padding:clamp(2.6rem,5.5vw,4.25rem) 0}
+.center{text-align:center}
+.h2{
+  font-family:var(--disp);font-weight:700;
+  font-size:clamp(1.7rem,4.6vw,2.5rem);letter-spacing:-.028em;
+  margin:0;text-wrap:balance;
+}
+.h2.up{text-transform:uppercase;letter-spacing:.01em}
+.tick{width:3rem;height:3px;background:var(--accent);margin:.9rem auto 2.4rem;border-radius:2px}
+.tick.left{margin-left:0;margin-right:0}
+.eyebrow{
+  font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--muted);margin:0 0 .5rem;
+}
+.badge{
+  display:inline-block;background:var(--ink);color:var(--ground);
+  font-family:var(--mono);font-size:.75rem;font-weight:500;
+  letter-spacing:.04em;padding:.32rem .7rem;
+}
+.btn{
+  display:inline-block;font-family:var(--mono);font-size:.78rem;
+  letter-spacing:.09em;text-transform:uppercase;
+  padding:.78rem 1.35rem;border:1px solid var(--ink);color:var(--ink);
+  transition:background .16s,color .16s,border-color .16s;
+}
+.btn:hover{background:var(--ink);color:var(--ground)}
+.btn.fill{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.btn.fill:hover{background:transparent;color:var(--accent)}
 
-/* ============ MASTHEAD ============ */
-.masthead { display: flex; flex-direction: column; gap: 1.5rem; }
+/* ================= HERO ================= */
+.hero{padding-top:clamp(2.5rem,5vw,3.75rem);padding-bottom:clamp(2.75rem,6vw,4.5rem)}
+.hero-grid{display:grid;grid-template-columns:1fr 24rem;gap:clamp(2rem,5vw,4rem);align-items:center}
+.hi{font-family:var(--disp);font-weight:700;font-size:1.6rem;letter-spacing:-.02em;margin:0}
+.hi::after{content:"";display:block;width:2.4rem;height:3px;background:var(--accent);margin-top:.5rem;border-radius:2px}
+.hero h1{
+  font-family:var(--disp);font-weight:800;
+  font-size:clamp(2.4rem,7vw,3.9rem);line-height:1.02;
+  letter-spacing:-.038em;margin:1.1rem 0 .9rem;text-wrap:balance;
+}
+.hero .blurb{color:var(--ink-2);max-width:38ch;margin:1.1rem 0 1.7rem}
+.hero .acts{display:flex;flex-wrap:wrap;gap:.7rem}
 
-.name {
-  font-family: var(--disp);
-  font-weight: 700;
-  font-size: clamp(2.9rem, 11vw, 5.25rem);
-  line-height: .92;
-  letter-spacing: -.035em;
-  margin: 0;
-  text-wrap: balance;
+/* receipt card — the hero visual */
+.receipt-card{
+  background:var(--surface);border:1px solid var(--rule);
+  box-shadow:0 18px 40px -22px var(--shadow);
+  padding:1.5rem 1.4rem 1.7rem;
+  position:relative;
 }
-
-.tagline {
-  font-family: var(--mono);
-  font-size: clamp(.813rem, 2.4vw, .938rem);
-  color: var(--accent);
-  letter-spacing: -.01em;
-  margin: 0;
+.receipt-card::after{
+  content:"";position:absolute;left:0;right:0;bottom:-9px;height:9px;
+  background:repeating-linear-gradient(135deg,var(--surface) 0 7px,transparent 7px 14px);
 }
-.tagline .caret {
-  display: inline-block;
-  width: .55em; height: 1.05em;
-  background: var(--accent);
-  vertical-align: -.16em;
-  margin-left: .12em;
-  animation: blink 1.2s steps(1) infinite;
+.receipt-card .rc-h{
+  font-family:var(--mono);font-size:.7rem;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--muted);
+  padding-bottom:.7rem;margin-bottom:.5rem;border-bottom:1px dashed var(--rule);
 }
-@keyframes blink { 50% { opacity: 0; } }
-@media (prefers-reduced-motion: reduce) {
-  .tagline .caret { animation: none; opacity: .5; }
-}
-
-.vitals {
-  display: flex; flex-wrap: wrap;
-  gap: .35rem 1.4rem;
-  padding-top: 1.4rem;
-  border-top: 1px solid var(--rule);
-}
-.vitals div { display: flex; gap: .5rem; align-items: baseline; }
-.vitals .v { font-family: var(--mono); font-size: .813rem; color: var(--ink-2); }
-.vitals a.v { color: var(--accent); }
-.vitals a.v:hover { text-decoration: underline; text-underline-offset: 3px; }
-
-
-/* ============ SECTIONS ============ */
-section { margin-top: clamp(3.25rem, 8vw, 5rem); }
-
-.sec-head {
-  display: flex; align-items: baseline; gap: 1rem;
-  margin-bottom: 1.75rem;
-}
-.sec-head::after {
-  content: ""; flex: 1;
-  border-bottom: 1px dashed var(--rule);
-  transform: translateY(-.2em);
-}
-
-.lede {
-  font-size: clamp(1.063rem, 2.6vw, 1.25rem);
-  line-height: 1.55;
-  color: var(--ink);
-  max-width: 40ch;
-}
-.body-copy { color: var(--ink-2); }
-
-/* ============ RECEIPT / TOTALS ============ */
-.receipt {
-  list-style: none; margin: 0; padding: 0;
-  max-width: 34rem;
-  font-variant-numeric: tabular-nums;
-}
-.receipt li {
-  display: flex; align-items: baseline;
-  padding: .42rem 0;
-}
-.receipt .k {
-  font-family: var(--mono); font-size: .813rem;
-  color: var(--ink-2); white-space: nowrap;
-}
-.receipt .dots {
-  flex: 1 1 auto; min-width: 1.5rem;
-  border-bottom: 1px dotted var(--rule);
-  transform: translateY(-.28em);
-  margin: 0 .55rem;
-}
-.receipt .n {
-  font-family: var(--disp); font-weight: 700;
-  font-size: 1.125rem; letter-spacing: -.02em;
-  color: var(--ink); white-space: nowrap;
-}
-.receipt li.total {
-  border-top: 1px solid var(--rule);
-  margin-top: .4rem; padding-top: .75rem;
-}
-.receipt li.total .k { color: var(--ink); font-weight: 600; }
-.receipt li.total .n { color: var(--accent); font-size: 1.375rem; }
-
-/* ============ WORK ============ */
-.work { display: flex; flex-direction: column; }
-
-.item {
-  display: grid;
-  grid-template-columns: 9.5rem 1fr;
-  gap: 0 2rem;
-  padding: 1.75rem 0;
-  border-top: 1px solid var(--rule-soft);
-}
-.item:first-child { border-top: 1px solid var(--rule); }
-
-.item .meta { display: flex; flex-direction: column; gap: .3rem; }
-.item .yr {
-  font-family: var(--mono); font-size: .813rem;
-  font-weight: 500; color: var(--ink); font-variant-numeric: tabular-nums;
-}
-.item .rl { font-family: var(--mono); font-size: .75rem; color: var(--muted); }
-
-.item h3 {
-  font-family: var(--disp); font-weight: 600;
-  font-size: 1.375rem; letter-spacing: -.022em;
-  margin: 0 0 .1rem; line-height: 1.2;
-  text-wrap: balance;
-}
-.item .kind {
-  font-size: .875rem; font-style: italic;
-  color: var(--muted); margin: 0 0 .7rem;
-}
-.item p { font-size: .938rem; color: var(--ink-2); margin-bottom: .85rem; }
-
-.tags { display: flex; flex-wrap: wrap; gap: .3rem; margin-top: .1rem; }
-.tags span {
-  font-family: var(--mono); font-size: .688rem;
-  color: var(--muted);
-  border: 1px solid var(--rule);
-  padding: .12rem .42rem;
+.receipt{list-style:none;margin:0;padding:0;font-variant-numeric:tabular-nums}
+.receipt li{display:flex;align-items:baseline;padding:.34rem 0}
+.receipt .k{font-family:var(--mono);font-size:.76rem;color:var(--ink-2);white-space:nowrap}
+.receipt .dots{flex:1;min-width:1rem;border-bottom:1px dotted var(--rule);transform:translateY(-.28em);margin:0 .5rem}
+.receipt .n{font-family:var(--disp);font-weight:700;font-size:1.02rem;letter-spacing:-.02em;color:var(--ink);white-space:nowrap}
+.receipt li.total{border-top:1px solid var(--rule);margin-top:.4rem;padding-top:.65rem}
+.receipt li.total .k{color:var(--ink);font-weight:600}
+.receipt li.total .n{color:var(--accent);font-size:1.25rem}
+@media (max-width:52rem){
+  .hero-grid{grid-template-columns:1fr}
+  .receipt-card{max-width:26rem}
 }
 
-.visit {
-  display: inline-flex; align-items: center; gap: .4rem;
-  font-family: var(--mono); font-size: .813rem;
-  font-weight: 500; margin-bottom: .85rem;
-  border-bottom: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
-  padding-bottom: 1px;
-  transition: border-color .15s ease;
+/* ================= WHAT I DO ================= */
+.cards3{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem}
+.card{
+  background:var(--surface);border:1px solid var(--rule);
+  padding:1.5rem 1.35rem;display:flex;flex-direction:column;gap:.55rem;
+  transition:border-color .16s,transform .16s;
 }
-.visit:hover { border-bottom-color: var(--accent); }
-.visit::after { content: "↗"; font-size: .875em; }
+.card:hover{border-color:var(--accent);transform:translateY(-3px)}
+.card .ic{width:2rem;height:2rem;color:var(--accent);margin-bottom:.35rem}
+.card h3{font-family:var(--disp);font-weight:700;font-size:1.02rem;letter-spacing:.02em;text-transform:uppercase;margin:0}
+.card p{margin:0;font-size:.9rem;color:var(--ink-2)}
+@media (max-width:52rem){.cards3{grid-template-columns:1fr}}
 
-/* ============ STACK ============ */
-.stack { display: flex; flex-direction: column; gap: 0; }
-.stack-row {
-  display: grid; grid-template-columns: 9.5rem 1fr;
-  gap: .35rem 2rem;
-  padding: .8rem 0;
-  border-top: 1px solid var(--rule-soft);
+/* ================= ABOUT ================= */
+.about-grid{display:grid;grid-template-columns:22rem 1fr;gap:clamp(2rem,5vw,3.5rem);align-items:start}
+.term{
+  background:#0C0E0F;border:1px solid var(--rule);
+  box-shadow:0 18px 40px -22px var(--shadow);
+  font-family:var(--mono);font-size:.76rem;line-height:1.75;
+  color:#8FA3A0;padding:0 0 1rem;overflow:hidden;
 }
-.stack-row:first-child { border-top: 1px solid var(--rule); }
-.stack-row .k { font-family: var(--mono); font-size: .75rem; color: var(--muted); letter-spacing: .04em; }
-.stack-row .v { font-size: .938rem; color: var(--ink-2); }
-.stack-row .v b { color: var(--ink); font-weight: 600; }
+.term .bar{
+  display:flex;gap:.4rem;align-items:center;
+  background:#161B1D;padding:.6rem .8rem;border-bottom:1px solid #262D2E;
+}
+.term .bar i{width:.6rem;height:.6rem;border-radius:50%;background:#3A4446;display:block}
+.term .bar span{margin-left:.5rem;font-size:.68rem;color:#6E7A79;letter-spacing:.06em}
+.term .body{padding:.9rem 1rem 0}
+.term .l{white-space:pre-wrap;margin:0}
+.term .c{color:#55DFCE}
+.term .y{color:#D8C98A}
+.term .g{color:#7FB98F}
+.about{max-width:44rem}
+.about p{color:var(--ink-2);margin:0 0 1rem;max-width:66ch}
+.about p:last-of-type{margin-bottom:1.4rem}
+.checks{list-style:none;margin:1.4rem 0 0;padding:0;display:flex;flex-direction:column;gap:.75rem}
+.checks li{display:flex;gap:.75rem;align-items:flex-start}
+.checks svg{flex:none;width:1.15rem;height:1.15rem;color:var(--accent);margin-top:.22rem}
+.checks span{font-size:.94rem;color:var(--ink)}
+@media (max-width:56rem){.about-grid{grid-template-columns:1fr}.term{max-width:26rem}}
 
-/* ============ TRACK ============ */
-.track { display: flex; flex-direction: column; }
-.stint {
-  display: grid; grid-template-columns: 9.5rem 1fr;
-  gap: 0 2rem;
-  padding: 1.35rem 0;
-  border-top: 1px solid var(--rule-soft);
+/* ================= PORTFOLIO ================= */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+.proj{
+  background:var(--surface);border:1px solid var(--rule);
+  display:flex;flex-direction:column;overflow:hidden;
+  transition:border-color .16s,transform .16s;
 }
-.stint:first-child { border-top: 1px solid var(--rule); }
-.stint .yr { font-family: var(--mono); font-size: .813rem; color: var(--ink); font-variant-numeric: tabular-nums; }
-.stint h3 { font-family: var(--sans); font-size: 1.063rem; font-weight: 600; margin: 0 0 .15rem; letter-spacing: -.01em; }
-.stint .co { font-size: .875rem; color: var(--muted); margin: 0 0 .5rem; }
-.stint p { font-size: .938rem; color: var(--ink-2); margin: 0; }
+.proj:hover{border-color:var(--accent);transform:translateY(-3px)}
+.shot{aspect-ratio:16/10;background:var(--band);border-bottom:1px solid var(--rule);position:relative;overflow:hidden}
+.shot .chrome{display:flex;gap:.3rem;padding:.5rem .6rem;background:color-mix(in srgb,var(--ink) 7%,transparent)}
+.shot .chrome i{width:.45rem;height:.45rem;border-radius:50%;background:var(--rule);display:block}
+.shot .canvas{position:absolute;inset:1.7rem .8rem .8rem;display:grid;gap:.35rem}
+.sk{background:color-mix(in srgb,var(--ink) 9%,transparent);border-radius:2px}
+.sk.a{background:color-mix(in srgb,var(--accent) 34%,transparent)}
+.proj .meat{padding:1.15rem 1.25rem 1.4rem;display:flex;flex-direction:column;gap:.45rem;flex:1}
+.proj h3{font-family:var(--disp);font-weight:700;font-size:1.12rem;letter-spacing:-.015em;margin:0}
+.proj .kind{font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;color:var(--muted);margin:0}
+.proj p{margin:.25rem 0 0;font-size:.9rem;color:var(--ink-2)}
+.tags{display:flex;flex-wrap:wrap;gap:.28rem;margin-top:.7rem}
+.tags span{font-family:var(--mono);font-size:.66rem;color:var(--muted);border:1px solid var(--rule);padding:.1rem .4rem}
+.live{
+  font-family:var(--mono);font-size:.76rem;font-weight:500;margin-top:.6rem;
+  align-self:flex-start;border-bottom:1px solid color-mix(in srgb,var(--accent) 40%,transparent);
+}
+.live::after{content:" ↗"}
+@media (max-width:52rem){.grid2{grid-template-columns:1fr}}
 
-/* ============ CONTACT ============ */
-.contact-grid { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 1.5rem; }
-.btn {
-  font-family: var(--mono); font-size: .813rem;
-  padding: .6rem 1rem;
-  border: 1px solid var(--rule);
-  color: var(--ink);
-  transition: border-color .15s ease, color .15s ease, background .15s ease;
-}
-.btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
-.btn.primary { border-color: var(--accent); color: var(--accent); }
-.btn.primary:hover { background: var(--accent); color: var(--ground); }
+/* ================= SKILLS ================= */
+.cards4{display:grid;grid-template-columns:repeat(4,1fr);gap:1.1rem}
+.sc{background:var(--surface);border:1px solid var(--rule);padding:1.15rem 1.1rem;display:flex;flex-direction:column;gap:.45rem}
+.sc .ic{width:1.6rem;height:1.6rem;color:var(--accent)}
+.sc h3{font-family:var(--disp);font-weight:700;font-size:.82rem;text-transform:uppercase;letter-spacing:.05em;margin:.2rem 0 0}
+.sc p{margin:0;font-family:var(--mono);font-size:.72rem;line-height:1.65;color:var(--ink-2)}
+@media (max-width:60rem){.cards4{grid-template-columns:1fr 1fr}}
+@media (max-width:34rem){.cards4{grid-template-columns:1fr}}
 
-footer {
-  margin-top: clamp(3.5rem, 8vw, 5rem);
-  padding-top: 1.25rem;
-  border-top: 1px dashed var(--rule);
-  display: flex; flex-wrap: wrap; gap: .5rem 1.5rem;
-  justify-content: space-between;
-  font-family: var(--mono); font-size: .719rem; color: var(--muted);
+/* ================= CTA ================= */
+.cta{background:var(--band);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.cta h2{
+  font-family:var(--disp);font-weight:700;text-transform:uppercase;
+  font-size:clamp(1.35rem,3.6vw,2.05rem);letter-spacing:-.015em;
+  margin:0 auto 1.8rem;max-width:24ch;text-wrap:balance;line-height:1.22;
 }
+.cta .acts{display:flex;flex-wrap:wrap;gap:.7rem;justify-content:center}
 
-/* ============ RESPONSIVE ============ */
-@media (max-width: 40rem) {
-  .item, .stack-row, .stint { grid-template-columns: 1fr; gap: .5rem; }
-  .item .meta { flex-direction: row; gap: .9rem; align-items: baseline; }
-  .stack-row { gap: .1rem; }
-}
+/* ================= FOOTER ================= */
+footer{padding:clamp(2.5rem,6vw,3.5rem) 0}
+.foot{display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:start}
+.foot .who .brand{display:block;margin-bottom:.6rem}
+.foot .copy{font-family:var(--mono);font-size:.68rem;color:var(--muted);margin:1rem 0 0}
+.links{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.85rem}
+.links li{display:flex;gap:.7rem;align-items:center}
+.links svg{flex:none;width:1.15rem;height:1.15rem;color:var(--ink)}
+.links a,.links span.t{font-family:var(--mono);font-size:.82rem;color:var(--ink-2);word-break:break-all}
+.links a:hover{color:var(--accent)}
+@media (max-width:44rem){.foot{grid-template-columns:1fr}}
 </style>
 
 </head>
 <body>
-<div class="wrap">
+<nav class="nav">
+  <div class="shell">
+    <span class="brand">Ahmed Zarif</span>
+    <ul>
+      <li><a href="#home" class="on">Home</a></li>
+      <li><a href="#about">About Me</a></li>
+      <li><a href="#work">Work</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
 
-  <header class="masthead">
+<!-- ================= HERO ================= -->
+<section class="hero" id="home">
+  <div class="shell hero-grid">
     <div>
-      <h1 class="name">Ahmed Zarif</h1>
-      <p class="tagline">Frontend engineer &middot; Angular &middot; Cairo<span class="caret"></span></p>
+      <p class="hi">Hi There!</p>
+      <h1>I'm Ahmed Zarif</h1>
+      <span class="badge">Frontend Developer &amp; Angular Specialist</span>
+      <p class="blurb">
+        I build the software people stand in front of &mdash; point-of-sale
+        terminals, checkout flows, and the storefronts behind them.
+      </p>
+      <div class="acts">
+        <a class="btn fill" href="#contact">Hire Me</a>
+        <a class="btn" href="#work">View My Work</a>
+      </div>
     </div>
 
-    <div class="vitals">
-      <div><span class="label">Focus</span><span class="v">Retail POS &amp; commerce</span></div>
-      <div><span class="label">Since</span><span class="v">2023</span></div>
-      <div><span class="label">Mail</span><a class="v" href="mailto:ahmedzarif724@gmail.com">ahmedzarif724@gmail.com</a></div>
-      <div><span class="label">Code</span><a class="v" href="https://github.com/ahmedzarif7242">github.com/ahmedzarif7242</a></div>
+    <div class="receipt-card">
+      <div class="rc-h">Ahmed Zarif &mdash; Summary</div>
+      <ul class="receipt">
+        <li><span class="k">Feature modules owned</span><span class="dots"></span><span class="n">19</span></li>
+        <li><span class="k">Payment gateways</span><span class="dots"></span><span class="n">7+</span></li>
+        <li><span class="k">Platforms shipped</span><span class="dots"></span><span class="n">4</span></li>
+        <li><span class="k">Uptime sustained</span><span class="dots"></span><span class="n">99.9%</span></li>
+        <li class="total"><span class="k">Checkout time</span><span class="dots"></span><span class="n">&minus;40%</span></li>
+      </ul>
     </div>
-  </header>
+  </div>
+</section>
 
-  <section>
-    <p class="lede">
-      I build the software people stand in front of &mdash; point-of-sale terminals,
-      checkout flows, and the storefronts behind them.
-    </p>
-    <p class="body-copy">
-      Most of it is Angular. Most of it ships to retail businesses in Egypt and the Gulf.
-      And most of it comes down to one thing: moving money from a customer to a merchant
-      without anything going wrong &mdash; on a till with a flaky network, in two languages,
-      through seven different payment providers that each have their own opinion about how
-      a transaction should work.
-    </p>
-    <p class="body-copy">
-      I started as a trainee in 2023 and now lead the frontend of a POS platform used to run
-      large-scale retail operations. I care about the parts nobody demos: the interceptor chain,
-      the caching layer, what the screen does when the connection drops mid-sale.
-    </p>
-  </section>
+<!-- ================= WHAT I DO ================= -->
+<section id="services">
+  <div class="shell">
+    <h2 class="h2 up center">What I Do</h2>
+    <div class="tick"></div>
+    <div class="cards3">
 
-  <section>
-    <div class="sec-head"><h2>By the numbers</h2></div>
-    <ul class="receipt">
+      <article class="card">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline>
+        </svg>
+        <h3>Frontend Engineering</h3>
+        <p>
+          Angular applications built to last &mdash; standalone components, signals,
+          zoneless change detection, and SSR. I lead migrations and set the state
+          and quality conventions a team builds on.
+        </p>
+      </article>
+
+      <article class="card">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line>
+        </svg>
+        <h3>POS &amp; Checkout</h3>
+        <p>
+          Tender engines, split payments, discounts and coupons &mdash; wired to
+          seven-plus gateways and built to stay correct when the cashier is moving
+          faster than the network.
+        </p>
+      </article>
+
+      <article class="card">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle>
+          <path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"></path>
+        </svg>
+        <h3>E-commerce &amp; SSR</h3>
+        <p>
+          Server-rendered storefronts that load fast and rank &mdash; catalogue,
+          cart, deposit-based checkout, loyalty, and full Arabic / English RTL
+          from the ground up.
+        </p>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ================= ABOUT ================= -->
+<section id="about">
+  <div class="shell">
+    <h2 class="h2 up center">About Me</h2>
+    <div class="tick"></div>
+    <div class="about-grid">
+
+      <div class="term" aria-hidden="true">
+        <div class="bar"><i></i><i></i><i></i><span>ahmed@retail-tec — prism</span></div>
+        <div class="body">
+<p class="l"><span class="c">$</span> ng version</p>
+<p class="l"><span class="g">Angular CLI: 21.0.5</span></p>
+<p class="l"><span class="g">Node: 22.14.0</span></p>
+<p class="l">&nbsp;</p>
+<p class="l"><span class="c">$</span> git log --author=zarif --oneline | wc -l</p>
+<p class="l"><span class="y">1,4xx</span></p>
+<p class="l">&nbsp;</p>
+<p class="l"><span class="c">$</span> npm run build -- --configuration=production</p>
+<p class="l"><span class="g">✔ Building...</span></p>
+<p class="l"><span class="g">✔ 19 lazy chunks emitted</span></p>
+<p class="l"><span class="g">✔ Complete.</span></p>
+<p class="l">&nbsp;</p>
+<p class="l"><span class="c">$</span> <span class="c">▊</span></p>
+        </div>
+      </div>
+
+      <div class="about">
+        <p>
+          I'm a Frontend Developer specialising in Angular, with <strong>2+ years of
+          professional experience</strong> building enterprise-grade applications across
+          retail POS, e-commerce, and digital ordering.
+        </p>
+        <p>
+          At Retail Technology Company I'm the primary frontend developer on
+          <strong>Prism V2.5</strong>, a web-based point-of-sale platform built for
+          large-scale retail operations, where I own <strong>19 feature modules</strong>
+          end to end &mdash; from Touch POS and Transaction V2 through inventory,
+          invoicing, and accounting. The work I'm proudest of is the tender and checkout
+          engine: I integrated <strong>7+ payment gateways</strong> (Tamara, Tabby, Mada,
+          MyFatoorah, STC Pay, Al Rajhi, and bank cards) alongside split payments,
+          item- and ticket-level discounts, and coupon handling, which reduced average
+          checkout time by <strong>40%</strong>.
+        </p>
+        <p>
+          I care as much about the architecture underneath the features as the features
+          themselves. I led our migration to <strong>Angular 21</strong> with zoneless
+          change detection and standalone components, and designed a reusable
+          <strong>NgRx SignalStore</strong> layer with custom store features &mdash;
+          pagination, request status, query caching &mdash; now adopted across the product
+          in place of duplicated state logic. I also built the HTTP interceptor chain
+          handling authentication, response caching, offline detection, and Sentry
+          tracing, which helps sustain <strong>99.9% uptime</strong> in production.
+        </p>
+        <p>
+          Beyond the POS platform I've shipped three further production products &mdash;
+          Meraki QR Menu, Samah Abaya, and BMask. Each ships full Arabic / English
+          internationalisation with RTL support, something I've come to treat as a
+          first-class requirement rather than an afterthought.
+        </p>
+
+        <ul class="checks">
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <span>Angular 21 &mdash; standalone, signals, zoneless, SSR</span>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <span>NgRx SignalStore, RxJS, interceptor chains &amp; caching</span>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <span>Payment gateway integration &amp; Arabic / English RTL</span>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ================= PORTFOLIO ================= -->
+<section id="work">
+  <div class="shell">
+    <h2 class="h2 up center">Portfolio</h2>
+    <div class="tick"></div>
+    <div class="grid2">
+
+      <article class="proj">
+        <div class="shot">
+          <div class="chrome"><i></i><i></i><i></i></div>
+          <div class="canvas" style="grid-template-columns:1fr 1fr 1fr;grid-template-rows:1.4rem repeat(3,1fr) 1.5rem">
+            <div class="sk" style="grid-column:1/4"></div>
+            <div class="sk"></div><div class="sk"></div><div class="sk a"></div>
+            <div class="sk"></div><div class="sk a"></div><div class="sk"></div>
+            <div class="sk a"></div><div class="sk"></div><div class="sk"></div>
+            <div class="sk a" style="grid-column:1/4"></div>
+          </div>
+        </div>
+        <div class="meat">
+          <h3>Prism V2.5</h3>
+          <p class="kind">Point-of-sale platform &middot; Lead frontend</p>
+          <p>
+            Nineteen modules end to end, and a tender engine handling split payments
+            across seven gateways, discounts, coupons and void handling &mdash; with
+            offline-aware requests for unstable in-store networks.
+          </p>
+          <div class="tags"><span>Angular 21</span><span>Zoneless</span><span>SignalStore</span><span>PrimeNG</span><span>Sentry</span></div>
+        </div>
+      </article>
+
+      <article class="proj">
+        <div class="shot">
+          <div class="chrome"><i></i><i></i><i></i></div>
+          <div class="canvas" style="grid-template-columns:1fr 1fr;grid-template-rows:1.2rem 1fr 1fr .9rem">
+            <div class="sk" style="grid-column:1/3"></div>
+            <div class="sk a" style="grid-row:2/4"></div>
+            <div class="sk"></div><div class="sk"></div>
+            <div class="sk" style="grid-column:1/3"></div>
+          </div>
+        </div>
+        <div class="meat">
+          <h3>Samah Abaya</h3>
+          <p class="kind">SSR fashion storefront &middot; Frontend</p>
+          <a class="live" href="https://samahabayas.com">samahabayas.com</a>
+          <p>
+            Server-rendered storefront with attribute filtering, an Instagram-style
+            reels viewer for discovery, and a deposit checkout that validates part
+            payments against the order balance before MyFatoorah sees them.
+          </p>
+          <div class="tags"><span>Angular 21 SSR</span><span>Express</span><span>Tailwind 4</span><span>MyFatoorah</span></div>
+        </div>
+      </article>
+
+      <article class="proj">
+        <div class="shot">
+          <div class="chrome"><i></i><i></i><i></i></div>
+          <div class="canvas" style="grid-template-columns:.8fr 1fr 1fr;grid-template-rows:1.1rem 1fr 1fr 1.1rem">
+            <div class="sk" style="grid-column:1/4"></div>
+            <div class="sk" style="grid-row:2/4"></div>
+            <div class="sk"></div><div class="sk a"></div>
+            <div class="sk a"></div><div class="sk"></div>
+            <div class="sk a" style="grid-column:2/4"></div>
+          </div>
+        </div>
+        <div class="meat">
+          <h3>Meraki QR Menu</h3>
+          <p class="kind">Digital ordering &amp; loyalty &middot; Frontend</p>
+          <p>
+            Scan, browse, order and track &mdash; backed by a loyalty engine with
+            points accrual, free-cup redemption and store credit as a tender,
+            plus Apple Pay and dynamic tipping at checkout.
+          </p>
+          <div class="tags"><span>Angular 21 SSR</span><span>SignalStore</span><span>Apple Pay</span><span>Vitest</span></div>
+        </div>
+      </article>
+
+      <article class="proj">
+        <div class="shot">
+          <div class="chrome"><i></i><i></i><i></i></div>
+          <div class="canvas" style="grid-template-columns:repeat(3,1fr);grid-template-rows:1.1rem 1fr 1fr .9rem">
+            <div class="sk a" style="grid-column:1/4"></div>
+            <div class="sk"></div><div class="sk"></div><div class="sk"></div>
+            <div class="sk"></div><div class="sk a"></div><div class="sk"></div>
+            <div class="sk" style="grid-column:1/3"></div><div class="sk a"></div>
+          </div>
+        </div>
+        <div class="meat">
+          <h3>BMask</h3>
+          <p class="kind">Saudi e-commerce &middot; Frontend</p>
+          <p>
+            My first production codebase &mdash; product, cart, wishlist and checkout
+            against a REST API, plus warranty activation by IMEI and car-service
+            booking taken end to end. UI work lifted engagement 25%.
+          </p>
+          <div class="tags"><span>Angular</span><span>TypeScript</span><span>RxJS</span><span>SCSS</span><span>i18n / RTL</span></div>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ================= SKILLS ================= -->
+<section id="skills">
+  <div class="shell">
+    <h2 class="h2 up center">Skills</h2>
+    <div class="tick"></div>
+    <div class="cards4">
+
+      <article class="sc">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+        <h3>Core</h3>
+        <p>Angular 2 → 21 | TypeScript | JavaScript ES6+ | HTML5 | CSS3 | SCSS</p>
+      </article>
+
+      <article class="sc">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M3 5v14c0 1.7 4 3 9 3s9-1.3 9-3V5"></path><path d="M3 12c0 1.7 4 3 9 3s9-1.3 9-3"></path></svg>
+        <h3>State &amp; Data</h3>
+        <p>NgRx SignalStore | RxJS | REST APIs | Interceptors | Caching | SSR</p>
+      </article>
+
+      <article class="sc">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
+        <h3>Payments</h3>
+        <p>Tamara | Tabby | Mada | MyFatoorah | STC Pay | Al Rajhi | Apple Pay</p>
+      </article>
+
+      <article class="sc">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+        <h3>Quality</h3>
+        <p>Vitest | Jasmine | Sentry | ESLint | Prettier | Husky | Git &amp; PR review</p>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ================= CTA ================= -->
+<section class="cta">
+  <div class="shell center">
+    <h2>Have a project in mind? Let's build something great together.</h2>
+    <div class="acts">
+      <a class="btn fill" href="mailto:ahmedzarif724@gmail.com">Hire Me</a>
+      <a class="btn" href="#work">View My Work</a>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer id="contact">
+  <div class="shell foot">
+    <div class="who">
+      <span class="brand">Ahmed Zarif</span>
+      <span class="badge">Frontend Developer &amp; Angular Specialist</span>
+      <p class="copy">&copy; 2026 Ahmed Zarif. All rights reserved.</p>
+    </div>
+    <ul class="links">
       <li>
-        <span class="k">Feature modules owned</span>
-        <span class="dots"></span><span class="n">19</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"></rect><polyline points="22 6 12 13 2 6"></polyline></svg>
+        <a href="mailto:ahmedzarif724@gmail.com">ahmedzarif724@gmail.com</a>
       </li>
       <li>
-        <span class="k">Payment gateways integrated</span>
-        <span class="dots"></span><span class="n">7+</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.09 4.18 2 2 0 0 1 4.08 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+        <a href="tel:+201100285282">+20 110 028 5282</a>
       </li>
       <li>
-        <span class="k">Production platforms shipped</span>
-        <span class="dots"></span><span class="n">4</span>
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3zM9 9h3.8v1.7h.05a4.2 4.2 0 0 1 3.75-2c4 0 4.75 2.6 4.75 6V21h-4v-5.5c0-1.3-.03-3-1.85-3s-2.15 1.44-2.15 2.9V21H9z"></path></svg>
+        <a href="https://www.linkedin.com/in/ahmed-zarif-8432b324a/">linkedin.com/in/ahmed-zarif-8432b324a</a>
       </li>
       <li>
-        <span class="k">Production uptime sustained</span>
-        <span class="dots"></span><span class="n">99.9%</span>
-      </li>
-      <li class="total">
-        <span class="k">Checkout time, before &rarr; after</span>
-        <span class="dots"></span><span class="n">&minus;40%</span>
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.4c.58.1.79-.25.79-.55v-2.1c-3.2.7-3.88-1.37-3.88-1.37-.53-1.34-1.29-1.7-1.29-1.7-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.2 1.77 1.2 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.8 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.12 3.05.74.81 1.18 1.84 1.18 3.1 0 4.43-2.69 5.4-5.25 5.69.41.36.78 1.06.78 2.14v3.17c0 .3.2.66.8.55A11.5 11.5 0 0 0 12 .5z"></path></svg>
+        <a href="https://github.com/ahmedzarif7242">github.com/ahmedzarif7242</a>
       </li>
     </ul>
-  </section>
+  </div>
+</footer>
 
-  <section>
-    <div class="sec-head"><h2>Selected work</h2></div>
-    <div class="work">
-
-      <article class="item">
-        <div class="meta">
-          <span class="yr">2025&ndash;26</span>
-          <span class="rl">Lead frontend</span>
-        </div>
-        <div>
-          <h3>Prism V2.5</h3>
-          <p class="kind">Point-of-sale platform for large-scale retail</p>
-          <p>
-            Nineteen feature modules, owned end to end &mdash; Touch POS, Transaction V2,
-            inventory, invoicing, customer management, accounting, daily shift, transfers
-            and receiving. The piece I spent the longest on is the tender engine: split
-            payments across seven gateways, item- and ticket-level discounts, coupons,
-            void handling, and kit selection, all of which had to stay correct when a
-            cashier is moving faster than the network.
-          </p>
-          <p>
-            I led the migration to Angular 21 with zoneless change detection, and replaced
-            the duplicated state logic across the product with one NgRx SignalStore layer
-            &mdash; pagination, request status, and query caching as reusable store features.
-          </p>
-          <div class="tags">
-            <span>Angular 21</span><span>Zoneless</span><span>NgRx SignalStore</span>
-            <span>RxJS</span><span>PrimeNG</span><span>Sentry</span>
-          </div>
-        </div>
-      </article>
-
-      <article class="item">
-        <div class="meta">
-          <span class="yr">2026</span>
-          <span class="rl">Frontend</span>
-        </div>
-        <div>
-          <h3>Samah Abaya</h3>
-          <p class="kind">Server-rendered fashion storefront</p>
-          <a class="visit" href="https://samahabayas.com">samahabayas.com</a>
-          <p>
-            An SSR storefront for a modest-fashion retailer: brand pages, category browsing
-            with attribute filtering, wishlist, and search. Checkout supports a deposit
-            &mdash; customers pay part now and settle the balance later &mdash; which meant
-            validating every amount against the order balance and the store's own minimum
-            before MyFatoorah ever sees it.
-          </p>
-          <p>
-            The homepage carries an Instagram-style reels viewer for product discovery,
-            with video served from Cloudinary and loaded lazily so the first paint stays fast.
-          </p>
-          <div class="tags">
-            <span>Angular 21 SSR</span><span>Express</span><span>SignalStore</span>
-            <span>Tailwind 4</span><span>Swiper</span><span>MyFatoorah</span>
-          </div>
-        </div>
-      </article>
-
-      <article class="item">
-        <div class="meta">
-          <span class="yr">2026</span>
-          <span class="rl">Frontend</span>
-        </div>
-        <div>
-          <h3>Meraki QR Menu</h3>
-          <p class="kind">Digital ordering and loyalty for restaurants</p>
-          <p>
-            Scan a code at the table, browse the menu, build an order with options and
-            add-ons, pay, and track it. Behind that sits a loyalty engine &mdash; points
-            accrual, free-cup redemption, store credit as a tender &mdash; plus an
-            unpaid-orders flow that lets someone come back to a cart they abandoned.
-          </p>
-          <p>
-            Server-rendered for the first load, with Apple Pay, dynamic tipping,
-            bidirectional infinite category feeds, and per-profile allergen filtering.
-          </p>
-          <div class="tags">
-            <span>Angular 21 SSR</span><span>Express</span><span>SignalStore</span>
-            <span>Tailwind 4</span><span>Apple Pay</span><span>Vitest</span>
-          </div>
-        </div>
-      </article>
-
-      <article class="item">
-        <div class="meta">
-          <span class="yr">2023&ndash;24</span>
-          <span class="rl">Frontend</span>
-        </div>
-        <div>
-          <h3>BMask</h3>
-          <p class="kind">Saudi e-commerce for mobile accessories</p>
-          <p>
-            My first production codebase. I built the product, cart, wishlist and checkout
-            screens against a REST API, then took two journeys end to end on my own:
-            warranty activation by IMEI, and car-service booking. Responsive and UI work
-            across the catalogue lifted user engagement by 25%.
-          </p>
-          <div class="tags">
-            <span>Angular</span><span>TypeScript</span><span>RxJS</span>
-            <span>SCSS</span><span>REST APIs</span><span>i18n / RTL</span>
-          </div>
-        </div>
-      </article>
-
-    </div>
-  </section>
-
-  <section>
-    <div class="sec-head"><h2>Stack</h2></div>
-    <div class="stack">
-      <div class="stack-row">
-        <span class="k">CORE</span>
-        <span class="v"><b>Angular 2 &rarr; 21</b>, TypeScript, JavaScript, HTML, CSS/SCSS</span>
-      </div>
-      <div class="stack-row">
-        <span class="k">ANGULAR</span>
-        <span class="v"><b>Standalone components</b>, signals, zoneless change detection, SSR with Express, lazy routes</span>
-      </div>
-      <div class="stack-row">
-        <span class="k">STATE</span>
-        <span class="v"><b>NgRx SignalStore</b> &amp; custom store features, RxJS, HTTP interceptor chains, response caching</span>
-      </div>
-      <div class="stack-row">
-        <span class="k">UI</span>
-        <span class="v">PrimeNG, TailwindCSS, Bootstrap, themable design systems, dark mode, <b>Arabic/English RTL</b></span>
-      </div>
-      <div class="stack-row">
-        <span class="k">PAYMENTS</span>
-        <span class="v">Tamara, Tabby, Mada, MyFatoorah, STC Pay, Al Rajhi, Apple Pay, bank cards</span>
-      </div>
-      <div class="stack-row">
-        <span class="k">QUALITY</span>
-        <span class="v">Vitest, Jasmine/Karma, Sentry, ESLint, Prettier, Husky, lint-staged</span>
-      </div>
-      <div class="stack-row">
-        <span class="k">WORKFLOW</span>
-        <span class="v">Git, PR review, Agile sprints, working directly with backend and QA</span>
-      </div>
-    </div>
-  </section>
-
-  <section>
-    <div class="sec-head"><h2>Track</h2></div>
-    <div class="track">
-      <div class="stint">
-        <span class="yr">Dec 2024 &rarr;</span>
-        <div>
-          <h3>Frontend Developer</h3>
-          <p class="co">Retail-Tec &middot; Cairo</p>
-          <p>
-            Primary frontend developer on Prism V2.5. Owning modules end to end, leading
-            the Angular 21 migration, and setting the state and quality conventions the
-            rest of the frontend team builds on.
-          </p>
-        </div>
-      </div>
-      <div class="stint">
-        <span class="yr">Sep 2023 &rarr; Dec 2024</span>
-        <div>
-          <h3>Trainee Front-End Developer</h3>
-          <p class="co">Retail-Tec &middot; Cairo</p>
-          <p>
-            Joined with no production experience and shipped to BMask within months.
-            Promoted to Frontend Developer after fifteen months.
-          </p>
-        </div>
-      </div>
-      <div class="stint">
-        <span class="yr">2018 &rarr; 2022</span>
-        <div>
-          <h3>BSc Computer Science</h3>
-          <p class="co">El-Shorouk Academy &middot; Cairo</p>
-          <p>
-            Graduation project: a Python system that reads hand gestures from a webcam and
-            builds them into words and sentences, with prediction to keep it usable at speed.
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section>
-    <div class="sec-head"><h2>Get in touch</h2></div>
-    <p class="body-copy">
-      I'm open to frontend and Angular roles &mdash; remote, in the Gulf, or relocating.
-      If you're building something where the frontend actually has to hold up under load,
-      I'd like to hear about it.
-    </p>
-    <div class="contact-grid">
-      <a class="btn primary" href="mailto:ahmedzarif724@gmail.com">ahmedzarif724@gmail.com</a>
-      <a class="btn" href="https://www.linkedin.com/in/ahmed-zarif-8432b324a/">LinkedIn</a>
-      <a class="btn" href="https://github.com/ahmedzarif7242">GitHub</a>
-      <a class="btn" href="tel:+201100285282">+20 110 028 5282</a>
-    </div>
-  </section>
-
-  <footer>
-    <span>Ahmed Zarif &mdash; Frontend Engineer, Cairo</span>
-    <span>Built by hand with Angular on the brain</span>
-  </footer>
-
-</div>
+<script>
+(function () {
+  var links = Array.prototype.slice.call(document.querySelectorAll('.nav a'));
+  var map = {};
+  links.forEach(function (a) {
+    var el = document.querySelector(a.getAttribute('href'));
+    if (el) map[a.getAttribute('href').slice(1)] = a;
+  });
+  var obs = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (!e.isIntersecting) return;
+      var a = map[e.target.id];
+      if (!a) return;
+      links.forEach(function (l) { l.classList.remove('on'); });
+      a.classList.add('on');
+    });
+  }, { rootMargin: '-45% 0px -50% 0px' });
+  ['home', 'about', 'work', 'contact'].forEach(function (id) {
+    var el = document.getElementById(id);
+    if (el) obs.observe(el);
+  });
+})();
+</script>
 </body>
 </html>
