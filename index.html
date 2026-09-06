@@ -181,6 +181,47 @@ section{padding:clamp(3.5rem,7.5vw,6.5rem) 0}
   box-shadow:0 12px 30px -12px rgba(224,64,251,.65);
 }
 .btn.fill:hover{box-shadow:0 18px 40px -14px rgba(224,64,251,.8);transform:translateY(-2px)}
+.btn.ghost{display:inline-flex;align-items:center;gap:.5rem}
+.btn.ghost svg{width:.95rem;height:.95rem;flex:none}
+.foot-cv{margin:.9rem 0 0}
+.foot-cv a{
+  font-family:var(--mono);font-size:.76rem;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--on-dark);border-bottom:1.5px solid transparent;padding-bottom:2px;
+  background:var(--hot);-webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.foot-cv a:hover{border-bottom-color:var(--g2)}
+
+/* ---- lightbox ---- */
+.shot{cursor:zoom-in}
+.lightbox{
+  position:fixed;inset:0;z-index:200;display:grid;place-items:center;padding:clamp(1rem,4vw,3rem);
+  background:rgba(20,17,44,.86);backdrop-filter:blur(10px);
+  opacity:0;transition:opacity .28s var(--ease);
+}
+.lightbox.open{opacity:1}
+.lightbox figure{margin:0;max-width:min(1100px,100%);max-height:100%;display:flex;flex-direction:column;gap:.85rem}
+.lightbox img{
+  width:100%;height:auto;max-height:78vh;object-fit:contain;border-radius:14px;
+  box-shadow:0 40px 90px -40px rgba(0,0,0,.9);
+  transform:scale(.96);transition:transform .32s var(--ease);
+}
+.lightbox.open img{transform:none}
+.lightbox figcaption{
+  font-family:var(--mono);font-size:.76rem;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--on-dark-2);text-align:center;
+}
+.lb-close{
+  position:absolute;top:1rem;right:1.15rem;width:2.6rem;height:2.6rem;
+  border-radius:50%;border:1px solid var(--rule);background:rgba(255,255,255,.09);
+  color:#fff;font-size:1.6rem;line-height:1;cursor:pointer;
+  transition:background .2s var(--ease),transform .2s var(--ease);
+}
+.lb-close:hover{background:rgba(255,255,255,.2);transform:rotate(90deg)}
+@media (prefers-reduced-motion:reduce){
+  .lightbox,.lightbox img,.lb-close{transition:none}
+  .lightbox img{transform:none}
+}
 
 /* ================= HERO ================= */
 .hero{padding-top:clamp(3rem,6vw,5rem);padding-bottom:clamp(3rem,6vw,4.5rem)}
@@ -438,6 +479,10 @@ footer{padding:clamp(2.75rem,6vw,4rem) 0;border-top:1px solid var(--rule)}
       <div class="acts">
         <a class="btn fill" href="#work">View My Work</a>
         <a class="btn" href="mailto:ahmedzarif724@gmail.com">Get In Touch</a>
+        <a class="btn ghost" href="Ahmed-Zarif-CV.pdf" download>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          Download CV
+        </a>
       </div>
     </div>
 
@@ -704,6 +749,7 @@ footer{padding:clamp(2.75rem,6vw,4rem) 0;border-top:1px solid var(--rule)}
     <div>
       <span class="brand"><img class="mark" src="img/logo.png" alt="" width="512" height="512">Ahmed Zarif</span>
       <span class="badge">Angular Specialist &middot; POS &amp; Commerce</span>
+      <p class="foot-cv"><a href="Ahmed-Zarif-CV.pdf" download>Download CV (PDF)</a></p>
       <p class="copy">&copy; 2026 Ahmed Zarif. Built by hand in Cairo.</p>
     </div>
     <ul class="links">
@@ -726,6 +772,14 @@ footer{padding:clamp(2.75rem,6vw,4rem) 0;border-top:1px solid var(--rule)}
     </ul>
   </div>
 </footer>
+
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Project screenshot" hidden>
+  <button class="lb-close" type="button" aria-label="Close">&times;</button>
+  <figure>
+    <img id="lb-img" src="" alt="">
+    <figcaption id="lb-cap"></figcaption>
+  </figure>
+</div>
 
 <script>
 (function () {
@@ -780,6 +834,44 @@ footer{padding:clamp(2.75rem,6vw,4rem) 0;border-top:1px solid var(--rule)}
       if (el) nav.observe(el);
     });
   }
+
+  /* ---- click a screenshot to see it full size ---- */
+  var lb = document.getElementById('lightbox');
+  var lbImg = document.getElementById('lb-img');
+  var lbCap = document.getElementById('lb-cap');
+  var lastFocus = null;
+
+  function openLb(img, caption) {
+    lastFocus = document.activeElement;
+    lbImg.src = img.currentSrc || img.src;
+    lbImg.alt = img.alt || '';
+    lbCap.textContent = caption;
+    lb.hidden = false;
+    requestAnimationFrame(function () { lb.classList.add('open'); });
+    document.body.style.overflow = 'hidden';
+    lb.querySelector('.lb-close').focus();
+  }
+  function closeLb() {
+    lb.classList.remove('open');
+    document.body.style.overflow = '';
+    setTimeout(function () { lb.hidden = true; lbImg.src = ''; }, 280);
+    if (lastFocus) lastFocus.focus();
+  }
+
+  document.querySelectorAll('.proj .shot').forEach(function (shot) {
+    var img = shot.querySelector('img');
+    var title = shot.parentNode.querySelector('h3');
+    if (!img) return;
+    shot.setAttribute('tabindex', '0');
+    shot.setAttribute('role', 'button');
+    shot.setAttribute('aria-label', 'View ' + (title ? title.textContent : 'screenshot') + ' full size');
+    shot.addEventListener('click', function () { openLb(img, title ? title.textContent : ''); });
+    shot.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openLb(img, title ? title.textContent : ''); }
+    });
+  });
+  lb.addEventListener('click', function (e) { if (e.target === lb || e.target.classList.contains('lb-close')) closeLb(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !lb.hidden) closeLb(); });
 
   /* ---- project cards: subtle pointer tilt ---- */
   if (!reduce && window.matchMedia('(hover: hover)').matches) {
