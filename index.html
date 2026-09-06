@@ -124,18 +124,54 @@ img{max-width:100%}
   border-radius:2px;transition:transform .38s var(--ease),width .38s var(--ease);
   transform-origin:left;pointer-events:none;
 }
+/* ---- hamburger + side drawer ---- */
+.burger{
+  display:none;width:2.6rem;height:2.6rem;flex:none;
+  border:1px solid var(--rule);border-radius:10px;background:rgba(255,255,255,.07);
+  cursor:pointer;padding:0;place-items:center;
+}
+.burger span{
+  display:block;width:1.05rem;height:2px;border-radius:2px;background:var(--on-dark);
+  margin:2.5px auto;transition:transform .28s var(--ease),opacity .2s var(--ease);
+}
+.burger[aria-expanded="true"] span:nth-child(1){transform:translateY(4.5px) rotate(45deg)}
+.burger[aria-expanded="true"] span:nth-child(2){opacity:0}
+.burger[aria-expanded="true"] span:nth-child(3){transform:translateY(-4.5px) rotate(-45deg)}
+
 @media (max-width:44rem){
-  .nav .shell{height:auto;padding:0;flex-direction:column;align-items:stretch;gap:0}
-  .brand{padding:.75rem var(--pad) .7rem}
+  /* backdrop-filter on .nav would trap position:fixed children inside it */
+  .nav{backdrop-filter:none;background:rgba(42,39,80,.97)}
+  .nav .shell{height:4rem}
+  .burger{display:grid}
   .nav ul{
-    border-top:1px solid var(--rule);background:rgba(255,255,255,.05);
-    padding:0 calc(var(--pad) - .5rem);
-    overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;
+    position:fixed;top:0;right:0;bottom:0;width:min(78vw,17rem);z-index:120;
+    flex-direction:column;align-items:stretch;gap:0;
+    padding:5.25rem 1.1rem 1.5rem;
+    background:linear-gradient(180deg,#3A3768,#2A2750);
+    border-left:1px solid var(--rule);
+    box-shadow:-30px 0 60px -30px rgba(0,0,0,.8);
+    transform:translateX(102%);transition:transform .34s var(--ease);
+    overflow-y:auto;
   }
-  .nav ul::-webkit-scrollbar{display:none}
-  .nav a{padding:.7rem .8rem;font-size:.68rem;white-space:nowrap}
+  .nav ul.open{transform:none}
+  .nav li{border-bottom:1px solid var(--rule)}
+  .nav a{padding:1rem .35rem;font-size:.82rem;letter-spacing:.16em}
+  .nav a.on{color:#fff}
+  .nav a.on::before{
+    content:"";position:absolute;left:-1.1rem;top:50%;transform:translateY(-50%);
+    width:3px;height:1.25rem;border-radius:2px;background:var(--hot);
+  }
   .nav .ink{display:none}
-  .nav a.on{box-shadow:inset 0 -2px 0 var(--g2)}
+  .scrim{
+    position:fixed;inset:0;z-index:110;background:rgba(16,13,38,.6);
+    backdrop-filter:blur(3px);opacity:0;pointer-events:none;
+    transition:opacity .3s var(--ease);
+  }
+  .scrim.on{opacity:1;pointer-events:auto}
+}
+@media (min-width:44.0625rem){ .scrim{display:none} }
+@media (prefers-reduced-motion:reduce){
+  .nav ul,.burger span,.scrim{transition:none}
 }
 
 /* ================= SECTION FRAME ================= */
@@ -258,12 +294,21 @@ section{padding:clamp(3.5rem,7.5vw,6.5rem) 0}
 .lightbox:not(.open){pointer-events:none}
 .lightbox.open{pointer-events:auto}
 .lightbox.open{opacity:1}
-.lightbox figure{margin:0;max-width:min(1100px,100%);max-height:100%;display:flex;flex-direction:column;gap:.85rem}
-.lightbox img{
-  width:100%;height:auto;max-height:78vh;object-fit:contain;border-radius:14px;
+.lightbox figure{
+  margin:0;max-width:min(1100px,100%);max-height:100%;
+  display:flex;flex-direction:column;gap:.85rem;min-height:0;
+}
+.lb-scroll{
+  overflow:auto;border-radius:14px;min-height:0;
   box-shadow:0 40px 90px -40px rgba(0,0,0,.9);
+  scrollbar-width:thin;
+}
+.lightbox img{
+  width:100%;height:auto;display:block;border-radius:14px;
   transform:scale(.96);transition:transform .32s var(--ease);
 }
+.lightbox.tall .lb-scroll{max-height:82vh}
+.lightbox:not(.tall) img{max-height:78vh;object-fit:contain}
 .lightbox.open img{transform:none}
 .lightbox figcaption{
   font-family:var(--mono);font-size:.76rem;letter-spacing:.1em;text-transform:uppercase;
@@ -510,7 +555,10 @@ footer{padding:clamp(2.75rem,6vw,4rem) 0;border-top:1px solid var(--rule)}
 <nav class="nav">
   <div class="shell">
     <span class="brand"><img class="mark" src="img/logo.png" alt="" width="512" height="512">Ahmed Zarif</span>
-    <ul>
+    <button class="burger" type="button" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="menu">
+      <span></span><span></span><span></span>
+    </button>
+    <ul id="menu">
       <li><a href="#home" class="on">Home</a></li>
       <li><a href="#about">About</a></li>
       <li><a href="#work">Work</a></li>
@@ -519,6 +567,7 @@ footer{padding:clamp(2.75rem,6vw,4rem) 0;border-top:1px solid var(--rule)}
     </ul>
   </div>
 </nav>
+<div class="scrim" id="scrim" hidden></div>
 
 <!-- ================= HERO ================= -->
 <section class="hero" id="home">
@@ -708,7 +757,7 @@ footer{padding:clamp(2.75rem,6vw,4rem) 0;border-top:1px solid var(--rule)}
       </article>
 
       <article class="proj pane rise">
-        <div class="shot"><img src="img/samah.jpg" alt="Samah Abaya storefront homepage" loading="lazy" width="1200" height="750"></div>
+        <div class="shot" data-full="img/full-samah.jpg"><img src="img/samah.jpg" alt="Samah Abaya storefront homepage" loading="lazy" width="1200" height="750"></div>
         <div class="meat">
           <h3>Samah Abaya</h3>
           <p class="kind">SSR fashion storefront &middot; Frontend</p>
@@ -723,7 +772,7 @@ footer{padding:clamp(2.75rem,6vw,4rem) 0;border-top:1px solid var(--rule)}
       </article>
 
       <article class="proj pane rise">
-        <div class="shot"><img src="img/meraki.jpg" alt="Meraki QR Menu ordering app" loading="lazy" width="1200" height="750"></div>
+        <div class="shot" data-full="img/full-meraki.jpg"><img src="img/meraki.jpg" alt="Meraki QR Menu ordering app" loading="lazy" width="1200" height="750"></div>
         <div class="meat">
           <h3>Meraki QR Menu</h3>
           <p class="kind">Digital ordering &amp; loyalty &middot; Frontend</p>
@@ -738,7 +787,7 @@ footer{padding:clamp(2.75rem,6vw,4rem) 0;border-top:1px solid var(--rule)}
       </article>
 
       <article class="proj pane rise">
-        <div class="shot"><img src="img/bmask.jpg" alt="BMask e-commerce homepage" loading="lazy" width="1200" height="750"></div>
+        <div class="shot" data-full="img/full-bmask.jpg"><img src="img/bmask.jpg" alt="BMask e-commerce homepage" loading="lazy" width="1200" height="750"></div>
         <div class="meat">
           <h3>BMask</h3>
           <p class="kind">Saudi e-commerce &middot; Frontend</p>
@@ -753,7 +802,7 @@ footer{padding:clamp(2.75rem,6vw,4rem) 0;border-top:1px solid var(--rule)}
       </article>
 
       <article class="proj wide pane rise">
-        <div class="shot"><img src="img/retail.jpg" alt="Retail-Tec corporate website" loading="lazy" width="1200" height="750"></div>
+        <div class="shot" data-full="img/full-retail.jpg"><img src="img/retail.jpg" alt="Retail-Tec corporate website" loading="lazy" width="1200" height="750"></div>
         <div class="meat">
           <h3>Retail-Tec Corporate Site</h3>
           <p class="kind">Company portfolio &middot; Frontend</p>
@@ -854,7 +903,7 @@ footer{padding:clamp(2.75rem,6vw,4rem) 0;border-top:1px solid var(--rule)}
 <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Project screenshot" hidden>
   <button class="lb-close" type="button" aria-label="Close">&times;</button>
   <figure>
-    <img id="lb-img" src="" alt="">
+    <div class="lb-scroll"><img id="lb-img" src="" alt=""></div>
     <figcaption id="lb-cap"></figcaption>
   </figure>
 </div>
@@ -913,6 +962,33 @@ footer{padding:clamp(2.75rem,6vw,4rem) 0;border-top:1px solid var(--rule)}
     });
   }
 
+  /* ---- mobile side drawer ---- */
+  var burger = document.getElementById('burger');
+  var menu = document.getElementById('menu');
+  var scrim = document.getElementById('scrim');
+
+  function menuOpen() { return menu.classList.contains('open'); }
+  function setMenu(open) {
+    burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+    burger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    menu.classList.toggle('open', open);
+    scrim.hidden = false;
+    scrim.classList.toggle('on', open);
+    document.body.style.overflow = open ? 'hidden' : '';
+    if (!open) setTimeout(function () { if (!menuOpen()) scrim.hidden = true; }, 340);
+  }
+
+  if (burger) {
+    burger.addEventListener('click', function () { setMenu(!menuOpen()); });
+    scrim.addEventListener('click', function () { setMenu(false); });
+    menu.querySelectorAll('a').forEach(function (a) {
+      a.addEventListener('click', function () { if (menuOpen()) setMenu(false); });
+    });
+    window.addEventListener('resize', function () {
+      if (window.innerWidth > 704 && menuOpen()) setMenu(false);
+    });
+  }
+
   /* ---- CV preview ---- */
   var cvBox = document.getElementById('cvbox');
   var cvFrame = document.getElementById('cv-iframe');
@@ -944,9 +1020,10 @@ footer{padding:clamp(2.75rem,6vw,4rem) 0;border-top:1px solid var(--rule)}
   var lbCap = document.getElementById('lb-cap');
   var lastFocus = null;
 
-  function openLb(img, caption) {
+  function openLb(img, caption, full) {
     lastFocus = document.activeElement;
-    lbImg.src = img.currentSrc || img.src;
+    lb.classList.toggle('tall', !!full);
+    lbImg.src = full || img.currentSrc || img.src;
     lbImg.alt = img.alt || '';
     lbCap.textContent = caption;
     lb.hidden = false;
@@ -957,7 +1034,7 @@ footer{padding:clamp(2.75rem,6vw,4rem) 0;border-top:1px solid var(--rule)}
   function closeLb() {
     lb.classList.remove('open');
     document.body.style.overflow = '';
-    setTimeout(function () { lb.hidden = true; lbImg.src = ''; }, 280);
+    setTimeout(function () { lb.hidden = true; lbImg.src = ''; lb.classList.remove('tall'); }, 280);
     if (lastFocus) lastFocus.focus();
   }
 
@@ -968,15 +1045,18 @@ footer{padding:clamp(2.75rem,6vw,4rem) 0;border-top:1px solid var(--rule)}
     shot.setAttribute('tabindex', '0');
     shot.setAttribute('role', 'button');
     shot.setAttribute('aria-label', 'View ' + (title ? title.textContent : 'screenshot') + ' full size');
-    shot.addEventListener('click', function () { openLb(img, title ? title.textContent : ''); });
+    var full = shot.getAttribute('data-full');
+    var cap = (title ? title.textContent : '') + (full ? ' — full page' : '');
+    shot.addEventListener('click', function () { openLb(img, cap, full); });
     shot.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openLb(img, title ? title.textContent : ''); }
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openLb(img, cap, full); }
     });
   });
   lb.addEventListener('click', function (e) { if (e.target === lb || e.target.classList.contains('lb-close')) closeLb(); });
   document.addEventListener('keydown', function (e) {
     if (e.key !== 'Escape') return;
-    if (!cvBox.hidden) closeCv();
+    if (menuOpen()) setMenu(false);
+    else if (!cvBox.hidden) closeCv();
     else if (!lb.hidden) closeLb();
   });
 
