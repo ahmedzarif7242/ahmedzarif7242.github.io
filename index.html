@@ -155,7 +155,8 @@ img{max-width:100%}
   }
   .nav ul.open{transform:none}
   .nav li{border-bottom:1px solid var(--rule)}
-  .nav a{padding:1rem .35rem;font-size:.82rem;letter-spacing:.16em}
+  .nav a{padding:1rem .35rem;font-size:.84rem;letter-spacing:.16em;color:#EDEBFA;font-weight:500}
+  .nav a:hover{color:#fff}
   .nav a.on{color:#fff}
   .nav a.on::before{
     content:"";position:absolute;left:-1.1rem;top:50%;transform:translateY(-50%);
@@ -303,10 +304,12 @@ section{padding:clamp(3.5rem,7.5vw,6.5rem) 0}
   box-shadow:0 40px 90px -40px rgba(0,0,0,.9);
   scrollbar-width:thin;
 }
-.lightbox img{
+.lightbox img,.lightbox video{
   width:100%;height:auto;display:block;border-radius:14px;
   transform:scale(.96);transition:transform .32s var(--ease);
 }
+.lightbox.open img,.lightbox.open video{transform:none}
+.lightbox video[hidden],.lightbox img[hidden]{display:none!important}
 .lightbox.tall .lb-scroll{max-height:82vh}
 .lightbox:not(.tall) img{max-height:78vh;object-fit:contain}
 .lightbox.open img{transform:none}
@@ -445,11 +448,24 @@ section{padding:clamp(3.5rem,7.5vw,6.5rem) 0}
 }
 .proj:hover{box-shadow:0 34px 74px -34px rgba(12,10,32,.9)}
 .shot{aspect-ratio:16/10;background:#2A2750;border-bottom:1px solid var(--rule-ink);overflow:hidden;border-radius:var(--r) var(--r) 0 0}
-.shot img{
+.shot img,.shot video{
   width:100%;height:100%;object-fit:cover;object-position:top center;display:block;
   transform:scale(1.01);transition:transform .7s var(--ease);
 }
-.proj:hover .shot img{transform:scale(1.06)}
+.shot.has-video{position:relative}
+.live-tag{
+  position:absolute;top:.7rem;left:.7rem;z-index:2;
+  display:inline-flex;align-items:center;gap:.4rem;
+  font-family:var(--mono);font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;
+  padding:.28rem .6rem;border-radius:999px;color:#fff;
+  background:rgba(20,17,44,.72);backdrop-filter:blur(6px);
+  border:1px solid rgba(255,255,255,.22);
+}
+.live-tag::before{
+  content:"";width:.38rem;height:.38rem;border-radius:50%;background:var(--g5);
+  box-shadow:0 0 8px 1px rgba(91,227,168,.8);
+}
+.proj:hover .shot img,.proj:hover .shot video{transform:scale(1.06)}
 .meat{padding:1.4rem 1.5rem 1.6rem;display:flex;flex-direction:column;gap:.45rem;flex:1}
 .proj h3{font-family:var(--disp);font-weight:800;font-size:1.22rem;letter-spacing:-.02em;margin:0;color:var(--ink)}
 .kind{font-family:var(--mono);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:0}
@@ -542,6 +558,7 @@ footer{padding:clamp(2.75rem,6vw,4rem) 0;border-top:1px solid var(--rule)}
 @keyframes lift{to{transform:none}}
 
 @media (prefers-reduced-motion:reduce){
+  .shot video{animation:none}
   html{scroll-behavior:auto}
   *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
   .rise{opacity:1;transform:none}
@@ -742,7 +759,12 @@ footer{padding:clamp(2.75rem,6vw,4rem) 0;border-top:1px solid var(--rule)}
     <div class="grid2">
 
       <article class="proj pane rise">
-        <div class="shot"><img src="img/prism.jpg" alt="Prism V2.5 point-of-sale dashboard" loading="lazy" width="1200" height="750"></div>
+        <div class="shot has-video" data-video="img/prism-demo.webm">
+          <video class="demo" src="img/prism-demo.webm" poster="img/prism-poster.jpg"
+                 autoplay loop muted playsinline preload="metadata"
+                 aria-label="Prism V2.5 — a sale being rung up"></video>
+          <span class="live-tag">Live demo</span>
+        </div>
         <div class="meat">
           <h3>Prism V2.5</h3>
           <p class="kind">Point-of-sale platform &middot; Lead frontend</p>
@@ -903,7 +925,10 @@ footer{padding:clamp(2.75rem,6vw,4rem) 0;border-top:1px solid var(--rule)}
 <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Project screenshot" hidden>
   <button class="lb-close" type="button" aria-label="Close">&times;</button>
   <figure>
-    <div class="lb-scroll"><img id="lb-img" src="" alt=""></div>
+    <div class="lb-scroll">
+      <img id="lb-img" src="" alt="">
+      <video id="lb-vid" controls loop muted playsinline hidden></video>
+    </div>
     <figcaption id="lb-cap"></figcaption>
   </figure>
 </div>
@@ -959,6 +984,13 @@ footer{padding:clamp(2.75rem,6vw,4rem) 0;border-top:1px solid var(--rule)}
     ['home', 'about', 'work', 'contact'].forEach(function (id) {
       var el = document.getElementById(id);
       if (el) nav.observe(el);
+    });
+  }
+
+  /* ---- respect reduced motion on the demo clip ---- */
+  if (reduce) {
+    document.querySelectorAll('.shot video').forEach(function (v) {
+      v.autoplay = false; v.removeAttribute('autoplay'); v.pause();
     });
   }
 
@@ -1020,11 +1052,23 @@ footer{padding:clamp(2.75rem,6vw,4rem) 0;border-top:1px solid var(--rule)}
   var lbCap = document.getElementById('lb-cap');
   var lastFocus = null;
 
-  function openLb(img, caption, full) {
+  var lbVid = document.getElementById('lb-vid');
+
+  function openLb(img, caption, full, video) {
     lastFocus = document.activeElement;
     lb.classList.toggle('tall', !!full);
-    lbImg.src = full || img.currentSrc || img.src;
-    lbImg.alt = img.alt || '';
+    if (video) {
+      lbImg.hidden = true;
+      lbVid.hidden = false;
+      lbVid.src = video;
+      lbVid.play().catch(function () {});
+    } else {
+      lbVid.hidden = true;
+      lbVid.removeAttribute('src');
+      lbImg.hidden = false;
+      lbImg.src = full || (img && (img.currentSrc || img.src)) || '';
+    }
+    lbImg.alt = (img && img.alt) || '';
     lbCap.textContent = caption;
     lb.hidden = false;
     requestAnimationFrame(function () { lb.classList.add('open'); });
@@ -1034,22 +1078,27 @@ footer{padding:clamp(2.75rem,6vw,4rem) 0;border-top:1px solid var(--rule)}
   function closeLb() {
     lb.classList.remove('open');
     document.body.style.overflow = '';
-    setTimeout(function () { lb.hidden = true; lbImg.src = ''; lb.classList.remove('tall'); }, 280);
+    lbVid.pause();
+    setTimeout(function () {
+      lb.hidden = true; lbImg.src = ''; lbVid.removeAttribute('src');
+      lb.classList.remove('tall');
+    }, 280);
     if (lastFocus) lastFocus.focus();
   }
 
   document.querySelectorAll('.proj .shot').forEach(function (shot) {
     var img = shot.querySelector('img');
+    var vid = shot.getAttribute('data-video');
     var title = shot.parentNode.querySelector('h3');
-    if (!img) return;
+    if (!img && !vid) return;
     shot.setAttribute('tabindex', '0');
     shot.setAttribute('role', 'button');
     shot.setAttribute('aria-label', 'View ' + (title ? title.textContent : 'screenshot') + ' full size');
     var full = shot.getAttribute('data-full');
-    var cap = (title ? title.textContent : '') + (full ? ' — full page' : '');
-    shot.addEventListener('click', function () { openLb(img, cap, full); });
+    var cap = (title ? title.textContent : '') + (vid ? ' — live demo' : full ? ' — full page' : '');
+    shot.addEventListener('click', function () { openLb(img, cap, full, vid); });
     shot.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openLb(img, cap, full); }
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openLb(img, cap, full, vid); }
     });
   });
   lb.addEventListener('click', function (e) { if (e.target === lb || e.target.classList.contains('lb-close')) closeLb(); });
