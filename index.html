@@ -166,19 +166,6 @@ section{padding:clamp(3.5rem,7.5vw,6.5rem) 0}
   color:var(--on-dark);font-family:var(--mono);font-size:.72rem;font-weight:500;
   letter-spacing:.04em;padding:.4rem .85rem;
 }
-.status{
-  display:inline-flex;align-items:center;gap:.5rem;
-  font-size:.86rem;color:var(--on-dark-2);margin:1rem 0 0;
-}
-.status .dot{
-  width:.5rem;height:.5rem;border-radius:50%;background:var(--ok);flex:none;
-  box-shadow:0 0 0 0 rgba(43,217,124,.55);animation:pulse 2.4s var(--ease) infinite;
-}
-@keyframes pulse{
-  0%{box-shadow:0 0 0 0 rgba(43,217,124,.5)}
-  70%{box-shadow:0 0 0 8px rgba(43,217,124,0)}
-  100%{box-shadow:0 0 0 0 rgba(43,217,124,0)}
-}
 
 .btn{
   display:inline-block;border-radius:999px;
@@ -395,7 +382,7 @@ footer{padding:clamp(2.75rem,6vw,4rem) 0;border-top:1px solid var(--rule)}
 /* ================= MOTION ================= */
 .rise{opacity:0;transform:translateY(22px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
 .rise.in{opacity:1;transform:none}
-.hero .hi,.hero .badge-wrap,.hero .blurb,.hero .acts,.hero .status,.portrait{
+.hero .hi,.hero .badge-wrap,.hero .blurb,.hero .acts,.portrait{
   opacity:0;transform:translateY(24px);
   animation:enter .85s var(--ease) forwards;
 }
@@ -406,7 +393,6 @@ footer{padding:clamp(2.75rem,6vw,4rem) 0;border-top:1px solid var(--rule)}
 .hero .badge-wrap{animation-delay:.38s}
 .hero .blurb{animation-delay:.46s}
 .hero .acts{animation-delay:.54s}
-.hero .status{animation-delay:.62s}
 .portrait{animation-delay:.32s}
 @keyframes enter{to{opacity:1;transform:none}}
 @keyframes lift{to{transform:none}}
@@ -415,7 +401,7 @@ footer{padding:clamp(2.75rem,6vw,4rem) 0;border-top:1px solid var(--rule)}
   html{scroll-behavior:auto}
   *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
   .rise{opacity:1;transform:none}
-  .hero .hi,.hero .badge-wrap,.hero .blurb,.hero .acts,.hero .status,.portrait,.hero h1 .l > span{opacity:1;transform:none}
+  .hero .hi,.hero .badge-wrap,.hero .blurb,.hero .acts,.portrait,.hero h1 .l > span{opacity:1;transform:none}
 }
 </style>
 
@@ -453,7 +439,6 @@ footer{padding:clamp(2.75rem,6vw,4rem) 0;border-top:1px solid var(--rule)}
         <a class="btn fill" href="#work">View My Work</a>
         <a class="btn" href="mailto:ahmedzarif724@gmail.com">Get In Touch</a>
       </div>
-      <p class="status"><span class="dot"></span>Available for work &mdash; remote, Gulf, or relocation</p>
     </div>
 
     <div class="portrait">
