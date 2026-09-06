@@ -28,7 +28,7 @@
 :root {
   --ground:#F4F6F8; --surface:#FFFFFF; --band:#E8ECF1;
   --ink:#0F172A; --ink-2:#45536B; --muted:#78859B;
-  --rule:#CDD6E1; --rule-soft:#DFE5EC;
+  --rule:#DCE3EB; --rule-soft:#E7ECF2;
   --accent:#1D4ED8; --accent-soft:rgba(29,78,216,.08);
   --on-accent:#FFFFFF;
   --shadow:rgba(15,23,42,.11);
@@ -42,7 +42,7 @@
   :root:not([data-theme="light"]) {
     --ground:#0B1120; --surface:#121A2B; --band:#0E1626;
     --ink:#E6EDF7; --ink-2:#A3B1C6; --muted:#6F7D93;
-    --rule:#223047; --rule-soft:#1A2739;
+    --rule:#1E2A3D; --rule-soft:#18222F;
     --accent:#60A5FA; --accent-soft:rgba(96,165,250,.12);
     --on-accent:#0B1120;
     --shadow:rgba(0,0,0,.55);
@@ -51,7 +51,7 @@
 :root[data-theme="dark"] {
   --ground:#0B1120; --surface:#121A2B; --band:#0E1626;
   --ink:#E6EDF7; --ink-2:#A3B1C6; --muted:#6F7D93;
-  --rule:#223047; --rule-soft:#1A2739;
+  --rule:#1E2A3D; --rule-soft:#18222F;
   --accent:#60A5FA; --accent-soft:rgba(96,165,250,.12);
   --on-accent:#0B1120;
   --shadow:rgba(0,0,0,.55);
@@ -98,7 +98,7 @@ img{max-width:100%}
 }
 
 /* ================= SHARED ================= */
-section{padding:clamp(2.6rem,5.5vw,4.25rem) 0}
+section{padding:clamp(3rem,6.5vw,5.25rem) 0}
 .center{text-align:center}
 .h2{
   font-family:var(--disp);font-weight:700;
@@ -129,7 +129,19 @@ section{padding:clamp(2.6rem,5.5vw,4.25rem) 0}
 
 /* ================= HERO ================= */
 .hero{padding-top:clamp(2.5rem,5vw,3.75rem);padding-bottom:clamp(2.75rem,6vw,4.5rem)}
-.hero-grid{max-width:46rem}
+.hero-grid{display:grid;grid-template-columns:1fr 20rem;gap:clamp(2rem,6vw,4.5rem);align-items:center}
+.portrait{position:relative;justify-self:center}
+.portrait img{
+  width:100%;height:auto;max-width:20rem;aspect-ratio:1;border-radius:50%;
+  display:block;object-fit:cover;
+  border:1px solid var(--rule);
+  box-shadow:0 24px 48px -28px var(--shadow),0 2px 6px -2px var(--shadow);
+}
+@media (max-width:52rem){
+  .hero-grid{grid-template-columns:1fr;gap:2.25rem}
+  .portrait{justify-self:start}
+  .portrait img{max-width:14rem}
+}
 .hi{font-family:var(--disp);font-weight:700;font-size:1.6rem;letter-spacing:-.02em;margin:0}
 .hi::after{content:"";display:block;width:2.4rem;height:3px;background:var(--accent);margin-top:.5rem;border-radius:2px}
 .hero h1{
@@ -145,10 +157,11 @@ section{padding:clamp(2.6rem,5.5vw,4.25rem) 0}
 .cards3{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem}
 .card{
   background:var(--surface);border:1px solid var(--rule);
-  padding:1.5rem 1.35rem;display:flex;flex-direction:column;gap:.55rem;
-  transition:border-color .16s,transform .16s;
+  padding:1.7rem 1.5rem;display:flex;flex-direction:column;gap:.55rem;
+  box-shadow:0 1px 2px -1px var(--shadow);
+  transition:border-color .16s,transform .16s,box-shadow .16s;
 }
-.card:hover{border-color:var(--accent);transform:translateY(-3px)}
+.card:hover{border-color:var(--accent);transform:translateY(-3px);box-shadow:0 12px 26px -18px var(--shadow)}
 .card .ic{width:2rem;height:2rem;color:var(--accent);margin-bottom:.35rem}
 .card h3{font-family:var(--disp);font-weight:700;font-size:1.02rem;letter-spacing:.02em;text-transform:uppercase;margin:0}
 .card p{margin:0;font-size:.9rem;color:var(--ink-2)}
@@ -187,9 +200,10 @@ section{padding:clamp(2.6rem,5.5vw,4.25rem) 0}
 .proj{
   background:var(--surface);border:1px solid var(--rule);
   display:flex;flex-direction:column;overflow:hidden;
-  transition:border-color .16s,transform .16s;
+  box-shadow:0 1px 2px -1px var(--shadow);
+  transition:border-color .16s,transform .16s,box-shadow .16s;
 }
-.proj:hover{border-color:var(--accent);transform:translateY(-3px)}
+.proj:hover{border-color:var(--accent);transform:translateY(-3px);box-shadow:0 16px 32px -22px var(--shadow)}
 .shot{aspect-ratio:16/10;background:var(--band);border-bottom:1px solid var(--rule);position:relative;overflow:hidden}
 .shot img{width:100%;height:100%;object-fit:cover;object-position:top center;display:block}
 .proj .meat{padding:1.15rem 1.25rem 1.4rem;display:flex;flex-direction:column;gap:.45rem;flex:1}
@@ -210,13 +224,19 @@ section{padding:clamp(2.6rem,5.5vw,4.25rem) 0}
 @media (max-width:52rem){.grid2{grid-template-columns:1fr}.proj.wide{grid-template-columns:1fr}.proj.wide .shot{border-right:0;border-bottom:1px solid var(--rule);aspect-ratio:16/10}}
 
 /* ================= SKILLS ================= */
-.cards4{display:grid;grid-template-columns:repeat(4,1fr);gap:1.1rem}
-.sc{background:var(--surface);border:1px solid var(--rule);padding:1.15rem 1.1rem;display:flex;flex-direction:column;gap:.45rem}
-.sc .ic{width:1.6rem;height:1.6rem;color:var(--accent)}
-.sc h3{font-family:var(--disp);font-weight:700;font-size:.82rem;text-transform:uppercase;letter-spacing:.05em;margin:.2rem 0 0}
-.sc p{margin:0;font-family:var(--mono);font-size:.72rem;line-height:1.65;color:var(--ink-2)}
-@media (max-width:60rem){.cards4{grid-template-columns:1fr 1fr}}
-@media (max-width:34rem){.cards4{grid-template-columns:1fr}}
+.skills{margin:0;max-width:56rem}
+.srow{
+  display:grid;grid-template-columns:9.5rem 1fr;gap:.35rem 2rem;
+  padding:.95rem 0;border-top:1px solid var(--rule-soft);
+}
+.srow:first-child{border-top:1px solid var(--rule)}
+.srow dt{
+  font-family:var(--mono);font-size:.72rem;letter-spacing:.11em;
+  text-transform:uppercase;color:var(--muted);margin:0;padding-top:.15rem;
+}
+.srow dd{margin:0;font-size:.95rem;color:var(--ink-2)}
+.srow dd b{color:var(--ink);font-weight:600}
+@media (max-width:44rem){.srow{grid-template-columns:1fr;gap:.2rem}}
 
 /* ================= CTA ================= */
 .cta{background:var(--band);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
@@ -269,6 +289,10 @@ footer{padding:clamp(2.5rem,6vw,3.5rem) 0}
         <a class="btn fill" href="#work">View My Work</a>
         <a class="btn" href="mailto:ahmedzarif724@gmail.com">Get In Touch</a>
       </div>
+    </div>
+
+    <div class="portrait">
+      <img src="img/portrait.jpg" alt="Ahmed Zarif" width="900" height="900">
     </div>
 
 </div>
@@ -493,33 +517,36 @@ footer{padding:clamp(2.5rem,6vw,3.5rem) 0}
   <div class="shell">
     <h2 class="h2 up center">Skills</h2>
     <div class="tick"></div>
-    <div class="cards4">
-
-      <article class="sc">
-        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
-        <h3>Core</h3>
-        <p>Angular 2 → 21 | TypeScript | JavaScript ES6+ | HTML5 | CSS3 | SCSS</p>
-      </article>
-
-      <article class="sc">
-        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M3 5v14c0 1.7 4 3 9 3s9-1.3 9-3V5"></path><path d="M3 12c0 1.7 4 3 9 3s9-1.3 9-3"></path></svg>
-        <h3>State &amp; Data</h3>
-        <p>NgRx SignalStore | RxJS | REST APIs | Interceptors | Caching | SSR</p>
-      </article>
-
-      <article class="sc">
-        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
-        <h3>Payments</h3>
-        <p>Tamara | Tabby | Mada | MyFatoorah | STC Pay | Al Rajhi | Apple Pay</p>
-      </article>
-
-      <article class="sc">
-        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-        <h3>Quality</h3>
-        <p>Vitest | Jasmine | Sentry | ESLint | Prettier | Husky | Git &amp; PR review</p>
-      </article>
-
-    </div>
+    <dl class="skills">
+      <div class="srow">
+        <dt>Core</dt>
+        <dd><b>Angular 2 → 21</b>, TypeScript, JavaScript ES6+, HTML5, CSS3, SCSS</dd>
+      </div>
+      <div class="srow">
+        <dt>Angular</dt>
+        <dd><b>Standalone components</b>, signals, zoneless change detection, SSR with Express, lazy routes</dd>
+      </div>
+      <div class="srow">
+        <dt>State &amp; data</dt>
+        <dd><b>NgRx SignalStore</b> with custom store features, RxJS, HTTP interceptor chains, response caching</dd>
+      </div>
+      <div class="srow">
+        <dt>UI</dt>
+        <dd>PrimeNG, TailwindCSS, Bootstrap, themable design systems, dark mode, <b>Arabic / English RTL</b></dd>
+      </div>
+      <div class="srow">
+        <dt>Payments</dt>
+        <dd>Tamara, Tabby, Mada, MyFatoorah, STC Pay, Al Rajhi, <b>Apple Pay</b>, bank cards</dd>
+      </div>
+      <div class="srow">
+        <dt>Quality</dt>
+        <dd>Vitest, Jasmine / Karma, <b>Sentry</b>, ESLint, Prettier, Husky, lint-staged</dd>
+      </div>
+      <div class="srow">
+        <dt>Workflow</dt>
+        <dd>Git, PR review, Agile sprints, working directly with backend engineers and QA</dd>
+      </div>
+    </dl>
   </div>
 </section>
 
