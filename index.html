@@ -192,6 +192,60 @@ section{padding:clamp(3.5rem,7.5vw,6.5rem) 0}
 }
 .foot-cv a:hover{border-bottom-color:var(--g2)}
 
+/* ---- CV preview ---- */
+.cvbox{
+  position:fixed;inset:0;z-index:210;display:grid;place-items:center;
+  padding:clamp(.6rem,3vw,2rem);
+  background:rgba(20,17,44,.88);backdrop-filter:blur(10px);
+  opacity:0;transition:opacity .28s var(--ease);
+}
+.cvbox[hidden]{display:none!important}
+.cvbox:not(.open){pointer-events:none}
+.cvbox.open{opacity:1;pointer-events:auto}
+.cv-panel{
+  width:min(920px,100%);height:min(88vh,100%);
+  display:flex;flex-direction:column;overflow:hidden;
+  border-radius:16px;background:var(--card);
+  box-shadow:0 40px 90px -40px rgba(0,0,0,.9);
+  transform:scale(.97);transition:transform .3s var(--ease);
+}
+.cvbox.open .cv-panel{transform:none}
+.cv-bar{
+  display:flex;align-items:center;justify-content:space-between;gap:1rem;
+  padding:.7rem .9rem;border-bottom:1px solid var(--rule-ink);flex:none;
+  background:linear-gradient(92deg,rgba(124,77,255,.10),rgba(224,64,251,.08));
+}
+.cv-title{font-family:var(--mono);font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2)}
+.cv-acts{display:flex;align-items:center;gap:.5rem}
+.cv-dl,.cv-tab{
+  font-family:var(--mono);font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;
+  padding:.45rem .8rem;border-radius:999px;white-space:nowrap;
+}
+.cv-dl{background:var(--hot);color:#fff}
+.cv-tab{border:1px solid var(--rule-ink);color:var(--ink-2)}
+.cv-tab:hover{border-color:var(--g2);color:var(--ink)}
+.cv-x{
+  width:2rem;height:2rem;border-radius:50%;border:1px solid var(--rule-ink);
+  background:transparent;color:var(--ink);font-size:1.35rem;line-height:1;cursor:pointer;flex:none;
+  transition:background .2s var(--ease),transform .2s var(--ease);
+}
+.cv-x:hover{background:rgba(27,26,46,.08);transform:rotate(90deg)}
+.cv-frame{flex:1;position:relative;background:#EFEDF6}
+.cv-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0;z-index:1}
+.cv-fallback{
+  position:absolute;inset:0;display:grid;place-content:center;text-align:center;
+  padding:2rem;margin:0;font-size:.92rem;color:var(--ink-2);
+}
+.cv-fallback a{font-weight:600;text-decoration:underline}
+@media (max-width:34rem){
+  .cv-title{display:none}
+  .cv-acts{width:100%;justify-content:space-between}
+}
+@media (prefers-reduced-motion:reduce){
+  .cvbox,.cv-panel,.cv-x{transition:none}
+  .cv-panel{transform:none}
+}
+
 /* ---- lightbox ---- */
 .shot{cursor:zoom-in}
 .lightbox{
@@ -483,10 +537,10 @@ footer{padding:clamp(2.75rem,6vw,4rem) 0;border-top:1px solid var(--rule)}
       <div class="acts">
         <a class="btn fill" href="#work">View My Work</a>
         <a class="btn" href="mailto:ahmedzarif724@gmail.com">Get In Touch</a>
-        <a class="btn ghost" href="Ahmed-Zarif-CV.pdf" download>
+        <button class="btn ghost" type="button" id="cv-open">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-          Download CV
-        </a>
+          View CV
+        </button>
       </div>
     </div>
 
@@ -777,6 +831,26 @@ footer{padding:clamp(2.75rem,6vw,4rem) 0;border-top:1px solid var(--rule)}
   </div>
 </footer>
 
+<div class="cvbox" id="cvbox" role="dialog" aria-modal="true" aria-label="Curriculum vitae" hidden>
+  <div class="cv-panel">
+    <header class="cv-bar">
+      <span class="cv-title">Ahmed Zarif &mdash; CV</span>
+      <span class="cv-acts">
+        <a class="cv-dl" href="Ahmed-Zarif-CV.pdf" download>Download PDF</a>
+        <a class="cv-tab" href="Ahmed-Zarif-CV.pdf" target="_blank" rel="noopener">Open in tab</a>
+        <button class="cv-x" type="button" aria-label="Close">&times;</button>
+      </span>
+    </header>
+    <div class="cv-frame">
+      <iframe id="cv-iframe" title="Ahmed Zarif CV" src=""></iframe>
+      <p class="cv-fallback">
+        Your browser can't display the PDF inline.
+        <a href="Ahmed-Zarif-CV.pdf" target="_blank" rel="noopener">Open it in a new tab</a>.
+      </p>
+    </div>
+  </div>
+</div>
+
 <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Project screenshot" hidden>
   <button class="lb-close" type="button" aria-label="Close">&times;</button>
   <figure>
@@ -839,6 +913,31 @@ footer{padding:clamp(2.75rem,6vw,4rem) 0;border-top:1px solid var(--rule)}
     });
   }
 
+  /* ---- CV preview ---- */
+  var cvBox = document.getElementById('cvbox');
+  var cvFrame = document.getElementById('cv-iframe');
+  var cvOpen = document.getElementById('cv-open');
+  var cvReturn = null;
+
+  function openCv() {
+    cvReturn = document.activeElement;
+    if (!cvFrame.getAttribute('src')) cvFrame.setAttribute('src', 'Ahmed-Zarif-CV.pdf#view=FitH');
+    cvBox.hidden = false;
+    requestAnimationFrame(function () { cvBox.classList.add('open'); });
+    document.body.style.overflow = 'hidden';
+    cvBox.querySelector('.cv-x').focus();
+  }
+  function closeCv() {
+    cvBox.classList.remove('open');
+    document.body.style.overflow = '';
+    setTimeout(function () { cvBox.hidden = true; }, 280);
+    if (cvReturn) cvReturn.focus();
+  }
+  if (cvOpen) cvOpen.addEventListener('click', openCv);
+  cvBox.addEventListener('click', function (e) {
+    if (e.target === cvBox || e.target.classList.contains('cv-x')) closeCv();
+  });
+
   /* ---- click a screenshot to see it full size ---- */
   var lb = document.getElementById('lightbox');
   var lbImg = document.getElementById('lb-img');
@@ -875,7 +974,11 @@ footer{padding:clamp(2.75rem,6vw,4rem) 0;border-top:1px solid var(--rule)}
     });
   });
   lb.addEventListener('click', function (e) { if (e.target === lb || e.target.classList.contains('lb-close')) closeLb(); });
-  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !lb.hidden) closeLb(); });
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== 'Escape') return;
+    if (!cvBox.hidden) closeCv();
+    else if (!lb.hidden) closeLb();
+  });
 
   /* ---- project cards: subtle pointer tilt ---- */
   if (!reduce && window.matchMedia('(hover: hover)').matches) {
