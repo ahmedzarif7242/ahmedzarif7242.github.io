@@ -111,6 +111,8 @@ img{max-width:100%}
 .mark{width:1.75rem;height:1.75rem;flex:none;display:block}
 .foot .mark{width:2.1rem;height:2.1rem}
 .nav ul{display:flex;gap:0;list-style:none;margin:0;padding:0;position:relative}
+.drawer-foot{display:none}
+@media (max-width:44rem){ .drawer-foot{display:flex} }
 .nav a{
   font-family:var(--mono);font-size:.7rem;letter-spacing:.14em;
   text-transform:uppercase;color:var(--on-dark-2);
@@ -141,32 +143,71 @@ img{max-width:100%}
 @media (max-width:44rem){
   /* backdrop-filter on .nav would trap position:fixed children inside it */
   .nav{backdrop-filter:none;background:rgba(42,39,80,.97)}
+  .nav{z-index:130}
   .nav .shell{height:4rem}
-  .burger{display:grid}
+  .burger{display:grid;position:relative;z-index:140}
   .nav ul{
-    position:fixed;top:0;right:0;bottom:0;width:min(78vw,17rem);z-index:120;
+    position:fixed;top:0;right:0;bottom:0;width:min(82vw,19rem);z-index:120;
     flex-direction:column;align-items:stretch;gap:0;
-    padding:5.25rem 1.1rem 1.5rem;
-    background:linear-gradient(180deg,#3A3768,#2A2750);
-    border-left:1px solid var(--rule);
-    box-shadow:-30px 0 60px -30px rgba(0,0,0,.8);
+    padding:1.4rem 1.4rem 1.6rem;
+    background:linear-gradient(165deg,#45416F 0%,#332F5E 55%,#272348 100%);
+    border-left:1px solid rgba(255,255,255,.14);
+    box-shadow:-30px 0 60px -30px rgba(0,0,0,.85);
     transform:translateX(102%);transition:transform .34s var(--ease);
     overflow-y:auto;
   }
-  .nav ul.open{transform:none}
-  .nav li{border-bottom:1px solid var(--rule)}
-  .nav a{padding:1rem .35rem;font-size:.84rem;letter-spacing:.16em;color:#EDEBFA;font-weight:500}
-  .nav a:hover{color:#fff}
-  .nav a.on{color:#fff}
-  .nav a.on::before{
-    content:"";position:absolute;left:-1.1rem;top:50%;transform:translateY(-50%);
-    width:3px;height:1.25rem;border-radius:2px;background:var(--hot);
+  .nav ul::before{
+    content:"";display:block;height:3px;width:2.75rem;border-radius:2px;
+    background:var(--hot);margin:.5rem 0 1.6rem;flex:none;
   }
+  .nav ul.open{transform:none}
+  .nav li{border-bottom:1px solid rgba(255,255,255,.09)}
+  .nav a{
+    padding:1.05rem .2rem;font-size:1.02rem;letter-spacing:.05em;
+    color:#fff;font-weight:600;font-family:var(--disp);text-transform:uppercase;
+    display:flex;align-items:center;justify-content:space-between;
+  }
+  .nav a::after{
+    content:"→";font-family:var(--sans);font-size:.9rem;
+    color:rgba(255,255,255,.32);transition:transform .25s var(--ease),color .25s var(--ease);
+  }
+  .nav a:hover::after{color:#fff;transform:translateX(3px)}
+  .nav a.on{
+    background:var(--hot);-webkit-background-clip:text;background-clip:text;
+    -webkit-text-fill-color:transparent;
+  }
+  .nav a.on::after{-webkit-text-fill-color:initial;color:var(--g2)}
+  /* links slide in behind the panel */
+  .nav ul.open li{animation:slidein .42s var(--ease) both}
+  .nav ul.open li:nth-child(1){animation-delay:.08s}
+  .nav ul.open li:nth-child(2){animation-delay:.13s}
+  .nav ul.open li:nth-child(3){animation-delay:.18s}
+  .nav ul.open li:nth-child(4){animation-delay:.23s}
+  .nav ul.open li:nth-child(5){animation-delay:.3s}
+  @keyframes slidein{from{opacity:0;transform:translateX(18px)}to{opacity:1;transform:none}}
+
+  .drawer-foot{
+    border-bottom:0!important;margin-top:auto;padding-top:1.4rem;
+    display:flex;flex-direction:column;gap:.75rem;align-items:flex-start;
+  }
+  .drawer-cv{
+    display:inline-block!important;padding:.72rem 1.2rem!important;border-radius:999px;
+    background:var(--hot);color:#fff!important;-webkit-text-fill-color:#fff!important;
+    font-family:var(--mono)!important;font-size:.72rem!important;letter-spacing:.12em!important;
+    font-weight:500!important;text-transform:uppercase;
+  }
+  .drawer-cv::after{content:""!important}
+  .drawer-mail{
+    padding:0!important;font-family:var(--mono)!important;font-size:.72rem!important;
+    letter-spacing:.02em!important;text-transform:none!important;font-weight:400!important;
+    color:rgba(255,255,255,.62)!important;-webkit-text-fill-color:rgba(255,255,255,.62)!important;
+    word-break:break-all;
+  }
+  .drawer-mail::after{content:""!important}
   .nav .ink{display:none}
   .scrim{
-    position:fixed;inset:0;z-index:110;background:rgba(16,13,38,.6);
-    backdrop-filter:blur(3px);opacity:0;pointer-events:none;
-    transition:opacity .3s var(--ease);
+    position:fixed;inset:0;z-index:110;background:rgba(14,11,32,.62);
+    opacity:0;pointer-events:none;transition:opacity .3s var(--ease);
   }
   .scrim.on{opacity:1;pointer-events:auto}
 }
@@ -267,13 +308,14 @@ section{padding:clamp(3.5rem,7.5vw,6.5rem) 0}
   transition:background .2s var(--ease),transform .2s var(--ease);
 }
 .cv-x:hover{background:rgba(27,26,46,.08);transform:rotate(90deg)}
-.cv-frame{flex:1;position:relative;background:#EFEDF6}
-.cv-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0;z-index:1}
-.cv-fallback{
-  position:absolute;inset:0;display:grid;place-content:center;text-align:center;
-  padding:2rem;margin:0;font-size:.92rem;color:var(--ink-2);
+.cv-frame{
+  flex:1;min-height:0;background:#DFDCEC;overflow-y:auto;-webkit-overflow-scrolling:touch;
+  display:flex;flex-direction:column;align-items:center;gap:.7rem;padding:.7rem;
 }
-.cv-fallback a{font-weight:600;text-decoration:underline}
+.cv-page{
+  width:100%;max-width:840px;height:auto;display:block;border-radius:6px;
+  box-shadow:0 6px 18px -8px rgba(20,17,44,.45);
+}
 @media (max-width:34rem){
   .cv-title{display:none}
   .cv-acts{width:100%;justify-content:space-between}
@@ -580,6 +622,10 @@ footer{padding:clamp(2.75rem,6vw,4rem) 0;border-top:1px solid var(--rule)}
       <li><a href="#about">About</a></li>
       <li><a href="#work">Work</a></li>
       <li><a href="#contact">Contact</a></li>
+      <li class="drawer-foot">
+        <a class="drawer-cv" href="Ahmed-Zarif-CV.pdf" target="_blank" rel="noopener">View CV</a>
+        <a class="drawer-mail" href="mailto:ahmedzarif724@gmail.com">ahmedzarif724@gmail.com</a>
+      </li>
       <span class="ink"></span>
     </ul>
   </div>
@@ -912,12 +958,9 @@ footer{padding:clamp(2.75rem,6vw,4rem) 0;border-top:1px solid var(--rule)}
         <button class="cv-x" type="button" aria-label="Close">&times;</button>
       </span>
     </header>
-    <div class="cv-frame">
-      <iframe id="cv-iframe" title="Ahmed Zarif CV" src=""></iframe>
-      <p class="cv-fallback">
-        Your browser can't display the PDF inline.
-        <a href="Ahmed-Zarif-CV.pdf" target="_blank" rel="noopener">Open it in a new tab</a>.
-      </p>
+    <div class="cv-frame" id="cv-frame">
+      <img class="cv-page" src="img/cv-p1.jpg" alt="CV page 1" width="981" height="1389" loading="lazy">
+      <img class="cv-page" src="img/cv-p2.jpg" alt="CV page 2" width="981" height="1389" loading="lazy">
     </div>
   </div>
 </div>
@@ -1023,13 +1066,13 @@ footer{padding:clamp(2.75rem,6vw,4rem) 0;border-top:1px solid var(--rule)}
 
   /* ---- CV preview ---- */
   var cvBox = document.getElementById('cvbox');
-  var cvFrame = document.getElementById('cv-iframe');
+  var cvFrame = document.getElementById('cv-frame');
   var cvOpen = document.getElementById('cv-open');
   var cvReturn = null;
 
   function openCv() {
     cvReturn = document.activeElement;
-    if (!cvFrame.getAttribute('src')) cvFrame.setAttribute('src', 'Ahmed-Zarif-CV.pdf#view=FitH');
+    if (cvFrame) cvFrame.scrollTop = 0;
     cvBox.hidden = false;
     requestAnimationFrame(function () { cvBox.classList.add('open'); });
     document.body.style.overflow = 'hidden';
